@@ -16,6 +16,7 @@ from reclass.defaults import PARAMETER_INTERPOLATION_SENTINELS, \
 from reclass.errors import IncompleteInterpolationError, \
         UndefinedVariableError, \
         UndefinedFunctionError
+from reclass.utils.function import get_function
 
 _SENTINELS_PARAMETER = [re.escape(s) for s in PARAMETER_INTERPOLATION_SENTINELS]
 _SENTINELS_FUNCTIONS = [re.escape(s) for s in FUNCTION_INTERPOLATION_SENTINELS]
@@ -47,29 +48,14 @@ class ReferenceFunction(Reference):
 
         func_args = [f.strip(' ') for f in func_args]
 
-        print("name: " + str(func_name))
-        print("args: " + str(func_args))
-
-        #if func_name == 'aggregate':
-        #    result = []
-        #    matching_hosts = []
-        #    for host in hosts:
-        #        if func_args[0](host) is True:
-        #            matching_hosts.append(host)
-        #    result = []
-        #    for host in matching_hosts:
-        #        result.append(func_args[1](host))
-        #    return result
-
-        if func_name == 'print':
-            return ' '.join(func_args)
-        else:
+        try:
+            func = get_function(func_name)
+            return func.execute(func_args)
+        except UndefinedFunctionError:
             raise UndefinedFunctionError(self.string)
-
 
     def get_dependences(self, **kwargs):
         return []
-
 
 
 class ReferenceParameter(Reference):
