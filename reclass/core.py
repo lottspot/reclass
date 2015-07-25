@@ -133,7 +133,7 @@ class Core(object):
         return ret
 
     def nodeinfo(self, nodename):
-        return self._nodeinfo_as_dict(nodename, self._nodeinfo(nodename))
+        return self.inventory()['nodes'][nodename]
 
     def inventory(self):
         entities = {}
