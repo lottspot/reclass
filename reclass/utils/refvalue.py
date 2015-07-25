@@ -14,7 +14,8 @@ from reclass.defaults import PARAMETER_INTERPOLATION_SENTINELS, \
         PARAMETER_INTERPOLATION_DELIMITER, \
         FUNCTION_INTERPOLATION_SENTINELS
 from reclass.errors import IncompleteInterpolationError, \
-        UndefinedVariableError
+        UndefinedVariableError, \
+        UndefinedFunctionError
 
 _SENTINELS_PARAMETER = [re.escape(s) for s in PARAMETER_INTERPOLATION_SENTINELS]
 _SENTINELS_FUNCTIONS = [re.escape(s) for s in FUNCTION_INTERPOLATION_SENTINELS]
@@ -62,6 +63,9 @@ class ReferenceFunction(Reference):
 
         if func_name == 'print':
             return ' '.join(func_args)
+        else:
+            raise UndefinedFunctionError(self.string)
+
 
     def get_dependences(self, **kwargs):
         return []

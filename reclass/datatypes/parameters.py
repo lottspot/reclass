@@ -11,7 +11,8 @@ import types
 from reclass.defaults import PARAMETER_INTERPOLATION_DELIMITER
 from reclass.utils.dictpath import DictPath
 from reclass.utils.refvalue import RefValue, ReferenceParameter
-from reclass.errors import InfiniteRecursionError, UndefinedVariableError
+from reclass.errors import InfiniteRecursionError, UndefinedVariableError, \
+    UndefinedFunctionError
 
 class Parameters(object):
     '''
@@ -218,4 +219,6 @@ class Parameters(object):
             del self._occurrences[path]
         except UndefinedVariableError as e:
             raise UndefinedVariableError(e.var, path)
+        except UndefinedFunctionError as e:
+            raise UndefinedFunctionError(e.var)
 
