@@ -15,8 +15,30 @@ from reclass.defaults import PARAMETER_INTERPOLATION_SENTINELS, \
 from reclass.errors import IncompleteInterpolationError, \
         UndefinedVariableError
 
-_SENTINELS = [re.escape(s) for s in PARAMETER_INTERPOLATION_SENTINELS]
-_RE = '{0}\s*(.+?)\s*{1}'.format(*_SENTINELS)
+_SENTINELS_PARAMETER = [re.escape(s) for s in PARAMETER_INTERPOLATION_SENTINELS]
+
+_RE_PARAMETER = '{0}\s*(.+?)\s*{1}'.format(*_SENTINELS_PARAMETER)
+
+
+class Reference(object):
+    def __init__(self, string):
+        self.string = string
+
+
+class ReferenceParameter(Reference):
+    def __init__(self, string):
+        super(ReferenceParameter, self).__init__(string)
+
+    def resolve(self, context, **kwargs):
+        path = DictPath(kwargs['delim'], self.string)
+        try:
+            return path.get_value(context)
+        except KeyError as e:
+            raise UndefinedVariableError(self.string)
+
+    def get_dependencies(self, **kwargs):
+        return [DictPath(kwargs['delim'], self.string)]
+
 
 class RefValue(object):
     '''
@@ -54,7 +76,7 @@ class RefValue(object):
     the default delimiter.
     '''
 
-    INTERPOLATION_RE = re.compile(_RE)
+    INTERPOLATION_RE_PARAMETER = re.compile(_RE_PARAMETER)
 
     def __init__(self, string, delim=PARAMETER_INTERPOLATION_DELIMITER):
         self._strings = []
@@ -63,24 +85,21 @@ class RefValue(object):
         self._parse(string)
 
     def _parse(self, string):
-        parts = RefValue.INTERPOLATION_RE.split(string)
+        parts = RefValue.INTERPOLATION_RE_PARAMETER.split(string)
         self._refs = parts[1:][::2]
+        self._refs = [ReferenceParameter(ref) for ref in self._refs]
         self._strings = parts[0:][::2]
-        self._check_strings(string)
+        self._check_strings(string, self._strings, PARAMETER_INTERPOLATION_SENTINELS)
 
-    def _check_strings(self, orig):
-        for s in self._strings:
-            pos = s.find(PARAMETER_INTERPOLATION_SENTINELS[0])
+
+    def _check_strings(self, orig, strings, sentinel):
+        for s in strings:
+            pos = s.find(sentinel[0])
             if pos >= 0:
-                raise IncompleteInterpolationError(orig,
-                                                   PARAMETER_INTERPOLATION_SENTINELS[1])
+                raise IncompleteInterpolationError(orig, sentinel[1])
 
     def _resolve(self, ref, context):
-        path = DictPath(self._delim, ref)
-        try:
-            return path.get_value(context)
-        except KeyError as e:
-            raise UndefinedVariableError(ref)
+        return ref.resolve(context, delim=self._delim)
 
     def has_references(self):
         return len(self._refs) > 0
@@ -107,9 +126,10 @@ class RefValue(object):
 
     def render(self, context):
         resolver = lambda s: self._resolve(s, context)
-        return self._assemble(resolver)
+        ret = self._assemble(resolver)
+        return ret
 
     def __repr__(self):
-        do_not_resolve = lambda s: s.join(PARAMETER_INTERPOLATION_SENTINELS)
+        do_not_resolve = lambda s: s.string.join(PARAMETER_INTERPOLATION_SENTINELS)
         return 'RefValue(%r, %r)' % (self._assemble(do_not_resolve),
                                      self._delim)

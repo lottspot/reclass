@@ -10,7 +10,7 @@ import types
 
 from reclass.defaults import PARAMETER_INTERPOLATION_DELIMITER
 from reclass.utils.dictpath import DictPath
-from reclass.utils.refvalue import RefValue
+from reclass.utils.refvalue import RefValue, ReferenceParameter
 from reclass.errors import InfiniteRecursionError, UndefinedVariableError
 
 class Parameters(object):
@@ -182,33 +182,34 @@ class Parameters(object):
     def _interpolate_inner(self, path, refvalue):
         self._occurrences[path] = True  # mark as seen
         for ref in refvalue.get_references():
-            path_from_ref = DictPath(self.delimiter, ref)
-            try:
-                refvalue_inner = self._occurrences[path_from_ref]
+            if isinstance(ref, ReferenceParameter):
+                paths_from_ref = ref.get_dependencies(delim=self.delimiter)
+                for path_from_ref in paths_from_ref:
+                    try:
+                        refvalue_inner = self._occurrences[path_from_ref]
 
-                # If there is no reference, then this will throw a KeyError,
-                # look further down where this is caught and execution passed
-                # to the next iteration of the loop
-                #
-                # If we get here, then the ref references another parameter,
-                # requiring us to recurse, dereferencing first those refs that
-                # are most used and are thus at the leaves of the dependency
-                # tree.
+                        # If there is no reference, then this will throw a KeyError,
+                        # look further down where this is caught and execution passed
+                        # to the next iteration of the loop
+                        #
+                        # If we get here, then the ref references another parameter,
+                        # requiring us to recurse, dereferencing first those refs that
+                        # are most used and are thus at the leaves of the dependency
+                        # tree.
 
-                if refvalue_inner is True:
-                    # every call to _interpolate_inner replaces the value of
-                    # the saved occurrences of a reference with True.
-                    # Therefore, if we encounter True instead of a refvalue,
-                    # it means that we have already processed it and are now
-                    # faced with a cyclical reference.
-                    raise InfiniteRecursionError(path, ref)
-                self._interpolate_inner(path_from_ref, refvalue_inner)
+                        if refvalue_inner is True:
+                            # every call to _interpolate_inner replaces the value of
+                            # the saved occurrences of a reference with True.
+                            # Therefore, if we encounter True instead of a refvalue,
+                            # it means that we have already processed it and are now
+                            # faced with a cyclical reference.
+                            raise InfiniteRecursionError(path, ref.string)
+                        self._interpolate_inner(path_from_ref, refvalue_inner)
 
-            except KeyError as e:
-                # not actually an error, but we are done resolving all
-                # dependencies of the current ref, so move on
-                continue
-
+                    except KeyError as e:
+                        # not actually an error, but we are done resolving all
+                        # dependencies of the current ref, so move on
+                        continue
         try:
             new = refvalue.render(self._base)
             path.set_value(self._base, new)
