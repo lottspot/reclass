@@ -31,24 +31,34 @@ class FunctionPrint(Function):
     def __init__(self):
         super(FunctionPrint, self).__init__()
 
-    def execute(self, *args):
-        return " ".join(*args)
+    def execute(self, additional_info, *args):
+        return " ".join(args)
 
 
 class FunctionAggregate(Function):
     def __init__(self):
         super(FunctionAggregate, self).__init__()
 
-    def execute(self, *args):
-        return "{aggregate()}"
-        #result = []
-        #matching_hosts = []
-        #for host in hosts:
+    def execute(self, additional_info, *args):
+        func_filter, func_extract = args[0:2]
+        hosts = additional_info
+        result = []
+        matching_hosts = {}
+        for hostname, hostinfo in additional_info.items():
+            hostinfo = hostinfo._base
+            expr = func_filter.replace("node", "hostinfo")
+            if eval(expr):
+                matching_hosts.update({hostname: hostinfo})
+            for hostname, hostinfo in matching_hosts.items():
+                expr = func_extract.replace("node", "hostinfo")
+                result.append(eval(expr))
+
         #    if func_args[0](host) is True:
         #        matching_hosts.append(host)
         #result = []
         #for host in matching_hosts:
         #    result.append(func_args[1](host))
         #return result
+        return result
 
 

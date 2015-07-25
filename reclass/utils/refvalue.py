@@ -34,14 +34,15 @@ class Reference(object):
         self.string = string
 
 
+
 class ReferenceFunction(Reference):
     def __init__(self, string):
         super(ReferenceFunction, self).__init__(string)
 
-    def resolve(self, context, **kwargs):
-        return self._execute(context)
+    def resolve(self, context, additional_info, *args, **kwargs):
+        return self._execute(context, additional_info)
 
-    def _execute(self, context):
+    def _execute(self, context, additional_info):
         match = _RE_FUNC.match(self.string)
         func_name = match.group(1)
         func_args = match.groups()[1].split(',')
@@ -50,7 +51,7 @@ class ReferenceFunction(Reference):
 
         try:
             func = get_function(func_name)
-            return func.execute(func_args)
+            return func.execute(additional_info, *func_args)
         except UndefinedFunctionError:
             raise UndefinedFunctionError(self.string)
 
@@ -62,7 +63,7 @@ class ReferenceParameter(Reference):
     def __init__(self, string):
         super(ReferenceParameter, self).__init__(string)
 
-    def resolve(self, context, **kwargs):
+    def resolve(self, context, *args, **kwargs):
         path = DictPath(kwargs['delim'], self.string)
         try:
             return path.get_value(context)
@@ -160,8 +161,8 @@ class RefValue(object):
             if pos >= 0:
                 raise IncompleteInterpolationError(orig, sentinel[1])
 
-    def _resolve(self, ref, context):
-        return ref.resolve(context, delim=self._delim)
+    def _resolve(self, ref, context, additional_info):
+        return ref.resolve(context, additional_info, delim=self._delim)
 
     def has_references(self):
         return len(self._refs) > 0
@@ -186,8 +187,8 @@ class RefValue(object):
             ret += self._strings[-1]
         return ret
 
-    def render(self, context):
-        resolver = lambda s: self._resolve(s, context)
+    def render(self, context, additional_info=None):
+        resolver = lambda s: self._resolve(s, context, additional_info)
         ret = self._assemble(resolver)
         return ret
 

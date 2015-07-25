@@ -15,6 +15,7 @@ import fnmatch
 import shlex
 from reclass.datatypes import Entity, Classes, Parameters
 from reclass.errors import MappingFormatError, ClassNotFound
+from reclass.utils.refvalue import RefValue
 
 class Core(object):
 
@@ -135,10 +136,28 @@ class Core(object):
     def nodeinfo(self, nodename):
         return self.inventory()['nodes'][nodename]
 
+    def _expand_all_functions(self, nodename, parameters, all_parameters):
+        for k, v in parameters.items():
+            if isinstance(v, RefValue):
+                parameters[k] = v.render(all_parameters[nodename]._base,
+                                         all_parameters)
+            elif isinstance(v, dict):
+                v = self._expand_all_functions(nodename, v, all_parameters)
+
     def inventory(self):
         entities = {}
         for n in self._storage.enumerate_nodes():
             entities[n] = self._nodeinfo(n)
+
+        all_parameters = {}
+        for nodename, info in entities.items():
+            all_parameters.update({nodename: info.parameters})
+        for nodename, info in entities.items():
+            params = info.parameters._base
+            info._set_parameters = self._expand_all_functions(
+                nodename,
+                params,
+                all_parameters)
 
         nodes = {}
         applications = {}

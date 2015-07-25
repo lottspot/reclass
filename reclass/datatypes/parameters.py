@@ -10,7 +10,7 @@ import types
 
 from reclass.defaults import PARAMETER_INTERPOLATION_DELIMITER
 from reclass.utils.dictpath import DictPath
-from reclass.utils.refvalue import RefValue, ReferenceParameter
+from reclass.utils.refvalue import RefValue, ReferenceParameter, ReferenceFunction
 from reclass.errors import InfiniteRecursionError, UndefinedVariableError, \
     UndefinedFunctionError
 
@@ -212,8 +212,13 @@ class Parameters(object):
                         # dependencies of the current ref, so move on
                         continue
         try:
-            new = refvalue.render(self._base)
-            path.set_value(self._base, new)
+            if isinstance(ref, ReferenceFunction):
+                # we cannot render functions yet, because they need access to the
+                # complete inventory
+                pass
+            else:
+                new = refvalue.render(self._base)
+                path.set_value(self._base, new)
 
             # finally, remove the reference from the occurrences cache
             del self._occurrences[path]
