@@ -11,18 +11,61 @@ import re
 
 from reclass.utils.dictpath import DictPath
 from reclass.defaults import PARAMETER_INTERPOLATION_SENTINELS, \
-        PARAMETER_INTERPOLATION_DELIMITER
+        PARAMETER_INTERPOLATION_DELIMITER, \
+        FUNCTION_INTERPOLATION_SENTINELS
 from reclass.errors import IncompleteInterpolationError, \
         UndefinedVariableError
 
 _SENTINELS_PARAMETER = [re.escape(s) for s in PARAMETER_INTERPOLATION_SENTINELS]
+_SENTINELS_FUNCTIONS = [re.escape(s) for s in FUNCTION_INTERPOLATION_SENTINELS]
 
 _RE_PARAMETER = '{0}\s*(.+?)\s*{1}'.format(*_SENTINELS_PARAMETER)
+_RE_FUNCTIONS = '{0}\s*(.+?)\s*{1}'.format(*_SENTINELS_FUNCTIONS)
+
+# matches a string like 'function, args)'
+_RE_FUNC = '([^(]+)\(([^)]+)\)'
+_RE_FUNC = re.compile(_RE_FUNC)
 
 
 class Reference(object):
     def __init__(self, string):
         self.string = string
+
+
+class ReferenceFunction(Reference):
+    def __init__(self, string):
+        super(ReferenceFunction, self).__init__(string)
+
+    def resolve(self, context, **kwargs):
+        return self._execute(context)
+
+    def _execute(self, context):
+        match = _RE_FUNC.match(self.string)
+        func_name = match.group(1)
+        func_args = match.groups()[1].split(',')
+
+        func_args = [f.strip(' ') for f in func_args]
+
+        print("name: " + str(func_name))
+        print("args: " + str(func_args))
+
+        #if func_name == 'aggregate':
+        #    result = []
+        #    matching_hosts = []
+        #    for host in hosts:
+        #        if func_args[0](host) is True:
+        #            matching_hosts.append(host)
+        #    result = []
+        #    for host in matching_hosts:
+        #        result.append(func_args[1](host))
+        #    return result
+
+        if func_name == 'print':
+            return ' '.join(func_args)
+
+    def get_dependences(self, **kwargs):
+        return []
+
 
 
 class ReferenceParameter(Reference):
@@ -77,6 +120,7 @@ class RefValue(object):
     '''
 
     INTERPOLATION_RE_PARAMETER = re.compile(_RE_PARAMETER)
+    INTERPOLATION_RE_FUNCTIONS = re.compile(_RE_FUNCTIONS)
 
     def __init__(self, string, delim=PARAMETER_INTERPOLATION_DELIMITER):
         self._strings = []
@@ -91,6 +135,34 @@ class RefValue(object):
         self._strings = parts[0:][::2]
         self._check_strings(string, self._strings, PARAMETER_INTERPOLATION_SENTINELS)
 
+        # each string could contain a function
+        for i in range(len(self._strings)):
+            strings, refs = self._parse_functions(self._strings[i])
+            refs = [ReferenceFunction(ref) for ref in refs]
+            if len(refs) == 0:
+                continue
+            del self._strings[i]
+            self._strings.insert(i, strings)
+            self._refs.insert(i, refs)
+
+        self._refs = self._flatten(self._refs)
+        self._strings = self._flatten(self._strings)
+
+    def _flatten(self, l):
+        ret = []
+        for element in l:
+            if isinstance(element, list):
+                ret.extend(element)
+            else:
+                ret.append(element)
+        return ret
+
+    def _parse_functions(self, string):
+        parts = RefValue.INTERPOLATION_RE_FUNCTIONS.split(string)
+        strings = parts[0:][::2]
+        functions = parts[1:][::2]
+        self._check_strings(string, strings, FUNCTION_INTERPOLATION_SENTINELS)
+        return (strings, functions)
 
     def _check_strings(self, orig, strings, sentinel):
         for s in strings:
