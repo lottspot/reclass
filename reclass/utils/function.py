@@ -42,7 +42,7 @@ class FunctionAggregate(Function):
     def execute(self, additional_info, *args):
         func_filter, func_extract = args[0:2]
         hosts = additional_info
-        result = []
+        result = {}
         matching_hosts = {}
         for hostname, hostinfo in additional_info.items():
             hostinfo = hostinfo._base
@@ -51,14 +51,5 @@ class FunctionAggregate(Function):
                 matching_hosts.update({hostname: hostinfo})
             for hostname, hostinfo in matching_hosts.items():
                 expr = func_extract.replace("node", "hostinfo")
-                result.append(eval(expr))
-
-        #    if func_args[0](host) is True:
-        #        matching_hosts.append(host)
-        #result = []
-        #for host in matching_hosts:
-        #    result.append(func_args[1](host))
-        #return result
+                result[hostname] = eval(expr)
         return result
-
-
