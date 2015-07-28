@@ -25,7 +25,7 @@ _RE_PARAMETER = '{0}\s*(.+?)\s*{1}'.format(*_SENTINELS_PARAMETER)
 _RE_FUNCTIONS = '{0}\s*(.+?)\s*{1}'.format(*_SENTINELS_FUNCTIONS)
 
 # matches a string like 'function, args)'
-_RE_FUNC = '([^(]+)\(([^)]*)\)'
+_RE_FUNC = '([^(]+)\((.*)\)'
 _RE_FUNC = re.compile(_RE_FUNC)
 
 
