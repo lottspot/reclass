@@ -47,9 +47,13 @@ class FunctionAggregate(Function):
         for hostname, hostinfo in additional_info.items():
             hostinfo = hostinfo._base
             expr = func_filter.replace("node", "hostinfo")
-            if eval(expr):
-                matching_hosts.update({hostname: hostinfo})
-            for hostname, hostinfo in matching_hosts.items():
-                expr = func_extract.replace("node", "hostinfo")
-                result[hostname] = eval(expr)
+            try:
+                if eval(expr):
+                    matching_hosts.update({hostname: hostinfo})
+                for hostname, hostinfo in matching_hosts.items():
+                    expr = func_extract.replace("node", "hostinfo")
+                    result[hostname] = eval(expr)
+            except KeyError:
+                raise
+
         return result

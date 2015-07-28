@@ -10,7 +10,8 @@ import types
 
 from reclass.defaults import PARAMETER_INTERPOLATION_DELIMITER
 from reclass.utils.dictpath import DictPath
-from reclass.utils.refvalue import RefValue, ReferenceParameter, ReferenceFunction
+from reclass.utils.refvalue import (RefValue, ReferenceParameter,
+                                    ReferenceFunction, RefFunction)
 from reclass.errors import InfiniteRecursionError, UndefinedVariableError, \
     UndefinedFunctionError
 
@@ -171,6 +172,19 @@ class Parameters(object):
 
     def has_unresolved_refs(self):
         return len(self._occurrences) > 0
+
+    def interpolate_functions(self, inventory):
+        self._interpolate_functions_inner(self._base, inventory)
+
+    def _interpolate_functions_inner(self, node, inventory):
+        for k, v in node.items():
+            if isinstance(v, dict):
+                self._interpolate_functions_inner(node[k], inventory)
+            elif isinstance(v, types.StringTypes):
+                refval = RefFunction(v)
+                if refval.has_references():
+                    ret = refval.render(inventory)
+                    node[k] = ret
 
     def interpolate(self):
         while self.has_unresolved_refs():

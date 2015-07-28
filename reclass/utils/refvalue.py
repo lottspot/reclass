@@ -39,10 +39,10 @@ class ReferenceFunction(Reference):
     def __init__(self, string):
         super(ReferenceFunction, self).__init__(string)
 
-    def resolve(self, context, additional_info, *args, **kwargs):
-        return self._execute(context, additional_info)
+    def resolve(self, inventory, *args, **kwargs):
+        return self._execute(inventory)
 
-    def _execute(self, context, additional_info):
+    def _execute(self, inventory):
         match = _RE_FUNC.match(self.string)
         func_name = match.group(1)
         func_args = match.groups()[1].split(',')
@@ -51,12 +51,10 @@ class ReferenceFunction(Reference):
 
         try:
             func = get_function(func_name)
-            return func.execute(additional_info, *func_args)
+            ret = func.execute(inventory, *func_args)
+            return ret
         except UndefinedFunctionError:
             raise UndefinedFunctionError(self.string)
-
-    def get_dependences(self, **kwargs):
-        return []
 
 
 class ReferenceParameter(Reference):
@@ -74,7 +72,76 @@ class ReferenceParameter(Reference):
         return [DictPath(kwargs['delim'], self.string)]
 
 
-class RefValue(object):
+class Ref(object):
+    def __init__(self, string):
+        self._strings = []
+        self._refs = []
+        self._parse(string)
+
+    def has_references(self):
+        return len(self._refs) > 0
+
+    def get_references(self):
+        return self._refs
+
+    def render(self, inventory):
+        pass
+
+    def _check_strings(self, orig, strings, sentinel):
+        for s in strings:
+            pos = s.find(sentinel[0])
+            if pos >= 0:
+                raise IncompleteInterpolationError(orig, sentinel[1])
+
+    def _assemble(self, resolver):
+        if not self.has_references():
+            return self._strings[0]
+
+        if self._strings == ['', '']:
+            # preserve the type of the referenced variable
+            ret =  resolver(self._refs[0])
+        else:
+
+            # reassemble the string by taking a string and str(ref) pairwise
+            ret = ''
+            for i in range(0, len(self._refs)):
+                ret += self._strings[i] + str(resolver(self._refs[i]))
+            if len(self._strings) > len(self._refs):
+                # and finally append a trailing string, if any
+                ret += self._strings[-1]
+        return ret
+
+
+class RefFunction(Ref):
+
+    INTERPOLATION_RE_FUNCTIONS = re.compile(_RE_FUNCTIONS)
+
+    def __init__(self, string):
+        super(RefFunction,self).__init__(string)
+
+    def _parse(self, string):
+        strings, refs = self._parse_functions(string)
+        self._strings = strings
+        self._refs = [ReferenceFunction(ref) for ref in refs]
+
+    def _parse_functions(self, string):
+        parts = RefFunction.INTERPOLATION_RE_FUNCTIONS.split(string)
+        strings = parts[0:][::2]
+        functions = parts[1:][::2]
+        self._check_strings(string, strings, FUNCTION_INTERPOLATION_SENTINELS)
+        return (strings, functions)
+
+
+    def _resolve(self, ref, inventory):
+        return ref.resolve(inventory)
+
+    def render(self, inventory):
+        resolver = lambda s: self._resolve(s, inventory)
+        ret = self._assemble(resolver)
+        return ret
+
+
+class RefValue(Ref):
     '''
     Isolates references in string values
 
@@ -111,13 +178,11 @@ class RefValue(object):
     '''
 
     INTERPOLATION_RE_PARAMETER = re.compile(_RE_PARAMETER)
-    INTERPOLATION_RE_FUNCTIONS = re.compile(_RE_FUNCTIONS)
 
     def __init__(self, string, delim=PARAMETER_INTERPOLATION_DELIMITER):
-        self._strings = []
-        self._refs = []
         self._delim = delim
-        self._parse(string)
+        super(RefValue,self).__init__(string)
+
 
     def _parse(self, string):
         parts = RefValue.INTERPOLATION_RE_PARAMETER.split(string)
@@ -126,66 +191,9 @@ class RefValue(object):
         self._strings = parts[0:][::2]
         self._check_strings(string, self._strings, PARAMETER_INTERPOLATION_SENTINELS)
 
-        # each string could contain a function
-        for i in range(len(self._strings)):
-            strings, refs = self._parse_functions(self._strings[i])
-            refs = [ReferenceFunction(ref) for ref in refs]
-            if len(refs) == 0:
-                continue
-            del self._strings[i]
-            self._strings.insert(i, strings)
-            self._refs.insert(i, refs)
-
-        self._refs = self._flatten(self._refs)
-        self._strings = self._flatten(self._strings)
-
-    def _flatten(self, l):
-        ret = []
-        for element in l:
-            if isinstance(element, list):
-                ret.extend(element)
-            else:
-                ret.append(element)
-        return ret
-
-    def _parse_functions(self, string):
-        parts = RefValue.INTERPOLATION_RE_FUNCTIONS.split(string)
-        strings = parts[0:][::2]
-        functions = parts[1:][::2]
-        self._check_strings(string, strings, FUNCTION_INTERPOLATION_SENTINELS)
-        return (strings, functions)
-
-    def _check_strings(self, orig, strings, sentinel):
-        for s in strings:
-            pos = s.find(sentinel[0])
-            if pos >= 0:
-                raise IncompleteInterpolationError(orig, sentinel[1])
 
     def _resolve(self, ref, context, additional_info):
         return ref.resolve(context, additional_info, delim=self._delim)
-
-    def has_references(self):
-        return len(self._refs) > 0
-
-    def get_references(self):
-        return self._refs
-
-    def _assemble(self, resolver):
-        if not self.has_references():
-            return self._strings[0]
-
-        if self._strings == ['', '']:
-            # preserve the type of the referenced variable
-            return resolver(self._refs[0])
-
-        # reassemble the string by taking a string and str(ref) pairwise
-        ret = ''
-        for i in range(0, len(self._refs)):
-            ret += self._strings[i] + str(resolver(self._refs[i]))
-        if len(self._strings) > len(self._refs):
-            # and finally append a trailing string, if any
-            ret += self._strings[-1]
-        return ret
 
     def render(self, context, additional_info=None):
         resolver = lambda s: self._resolve(s, context, additional_info)
