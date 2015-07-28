@@ -34,7 +34,6 @@ class Reference(object):
         self.string = string
 
 
-
 class ReferenceFunction(Reference):
     def __init__(self, string):
         super(ReferenceFunction, self).__init__(string)
@@ -68,11 +67,8 @@ class ReferenceParameter(Reference):
         except KeyError as e:
             raise UndefinedVariableError(self.string)
 
-    def get_dependencies(self, **kwargs):
-        return [DictPath(kwargs['delim'], self.string)]
 
-
-class Ref(object):
+class ReferenceString(object):
     def __init__(self, string):
         self._strings = []
         self._refs = []
@@ -99,7 +95,7 @@ class Ref(object):
 
         if self._strings == ['', '']:
             # preserve the type of the referenced variable
-            ret =  resolver(self._refs[0])
+            ret = resolver(self._refs[0])
         else:
 
             # reassemble the string by taking a string and str(ref) pairwise
@@ -112,12 +108,12 @@ class Ref(object):
         return ret
 
 
-class RefFunction(Ref):
+class ReferenceStringFunction(ReferenceString):
 
     INTERPOLATION_RE_FUNCTIONS = re.compile(_RE_FUNCTIONS)
 
     def __init__(self, string):
-        super(RefFunction,self).__init__(string)
+        super(ReferenceStringFunction,self).__init__(string)
 
     def _parse(self, string):
         strings, refs = self._parse_functions(string)
@@ -125,7 +121,7 @@ class RefFunction(Ref):
         self._refs = [ReferenceFunction(ref) for ref in refs]
 
     def _parse_functions(self, string):
-        parts = RefFunction.INTERPOLATION_RE_FUNCTIONS.split(string)
+        parts = self.INTERPOLATION_RE_FUNCTIONS.split(string)
         strings = parts[0:][::2]
         functions = parts[1:][::2]
         self._check_strings(string, strings, FUNCTION_INTERPOLATION_SENTINELS)
@@ -141,36 +137,36 @@ class RefFunction(Ref):
         return ret
 
 
-class RefValue(Ref):
+class ReferenceStringParameter(ReferenceString):
     '''
     Isolates references in string values
 
-    RefValue can be used to isolate and eventually expand references to other
+    ReferenceStringParameter can be used to isolate and eventually expand references to other
     parameters in strings. Those references can then be iterated and rendered
     in the context of a dictionary to resolve those references.
 
-    RefValue always gets constructed from a string, because templating
+    ReferenceStringParameter always gets constructed from a string, because templating
     — essentially this is what's going on — is necessarily always about
-    strings. Therefore, generally, the rendered value of a RefValue instance
+    strings. Therefore, generally, the rendered value of a ReferenceStringParameter instance
     will also be a string.
 
-    Nevertheless, as this might not be desirable, RefValue will return the
+    Nevertheless, as this might not be desirable, ReferenceStringParameter will return the
     referenced variable without casting it to a string, if the templated
     string contains nothing but the reference itself.
 
     For instance:
 
       mydict = {'favcolour': 'yellow', 'answer': 42, 'list': [1,2,3]}
-      RefValue('My favourite colour is ${favolour}').render(mydict)
+      ReferenceStringParameter('My favourite colour is ${favolour}').render(mydict)
       → 'My favourite colour is yellow'      # a string
 
-      RefValue('The answer is ${answer}').render(mydict)
+      ReferenceStringParameter('The answer is ${answer}').render(mydict)
       → 'The answer is 42'                   # a string
 
-      RefValue('${answer}').render(mydict)
+      ReferenceStringParameter('${answer}').render(mydict)
       → 42                                   # an int
 
-      RefValue('${list}').render(mydict)
+      ReferenceStringParameter('${list}').render(mydict)
       → [1,2,3]                              # an list
 
     The markers used to identify references are set in reclass.defaults, as is
@@ -181,11 +177,11 @@ class RefValue(Ref):
 
     def __init__(self, string, delim=PARAMETER_INTERPOLATION_DELIMITER):
         self._delim = delim
-        super(RefValue,self).__init__(string)
+        super(ReferenceStringParameter,self).__init__(string)
 
 
     def _parse(self, string):
-        parts = RefValue.INTERPOLATION_RE_PARAMETER.split(string)
+        parts = ReferenceStringParameter.INTERPOLATION_RE_PARAMETER.split(string)
         self._refs = parts[1:][::2]
         self._refs = [ReferenceParameter(ref) for ref in self._refs]
         self._strings = parts[0:][::2]
@@ -202,5 +198,5 @@ class RefValue(Ref):
 
     def __repr__(self):
         do_not_resolve = lambda s: s.string.join(PARAMETER_INTERPOLATION_SENTINELS)
-        return 'RefValue(%r, %r)' % (self._assemble(do_not_resolve),
+        return 'ReferenceStringParameter(%r, %r)' % (self._assemble(do_not_resolve),
                                      self._delim)

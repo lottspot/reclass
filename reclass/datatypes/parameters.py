@@ -10,10 +10,10 @@ import types
 
 from reclass.defaults import PARAMETER_INTERPOLATION_DELIMITER
 from reclass.utils.dictpath import DictPath
-from reclass.utils.refvalue import (RefValue, ReferenceParameter,
-                                    ReferenceFunction, RefFunction)
-from reclass.errors import InfiniteRecursionError, UndefinedVariableError, \
-    UndefinedFunctionError
+from reclass.utils.refvalue import (ReferenceStringParameter, ReferenceParameter,
+                                    ReferenceFunction, ReferenceStringFunction)
+from reclass.errors import (InfiniteRecursionError, UndefinedVariableError,
+                            UndefinedFunctionError)
 
 class Parameters(object):
     '''
@@ -72,37 +72,37 @@ class Parameters(object):
         return self._base.copy()
 
     def _update_scalar(self, cur, new, path):
-        if isinstance(cur, RefValue) and path in self._occurrences:
-            # If the current value already holds a RefValue, we better forget
+        if isinstance(cur, ReferenceStringParameter) and path in self._occurrences:
+            # If the current value already holds a ReferenceStringParameter, we better forget
             # the occurrence, or else interpolate() will later overwrite
-            # unconditionally. If the new value is a RefValue, the occurrence
+            # unconditionally. If the new value is a ReferenceStringParameter, the occurrence
             # will be added again further on
             del self._occurrences[path]
 
         if self.delimiter is None or not isinstance(new, (types.StringTypes,
-                                                          RefValue)):
+                                                          ReferenceStringParameter)):
             # either there is no delimiter defined (and hence no references
             # are being used), or the new value is not a string (and hence
-            # cannot be turned into a RefValue), and not a RefValue. We can
+            # cannot be turned into a ReferenceStringParameter), and not a ReferenceStringParameter. We can
             # shortcut and just return the new scalar
             return new
 
-        elif isinstance(new, RefValue):
-            # the new value is (already) a RefValue, so we need not touch it
+        elif isinstance(new, ReferenceStringParameter):
+            # the new value is (already) a ReferenceStringParameter, so we need not touch it
             # at all
             ret = new
 
         else:
             # the new value is a string, let's see if it contains references,
-            # by way of wrapping it in a RefValue and querying the result
-            ret = RefValue(new, self.delimiter)
+            # by way of wrapping it in a ReferenceStringParameter and querying the result
+            ret = ReferenceStringParameter(new, self.delimiter)
             if not ret.has_references():
-                # do not replace with RefValue instance if there are no
-                # references, i.e. discard the RefValue in ret, just return
+                # do not replace with ReferenceStringParameter instance if there are no
+                # references, i.e. discard the ReferenceStringParameter in ret, just return
                 # the new value
                 return new
 
-        # So we now have a RefValue. Let's, keep a reference to the instance
+        # So we now have a ReferenceStringParameter. Let's, keep a reference to the instance
         # we just created, in a dict indexed by the dictionary path, instead
         # of just a list. The keys are required to resolve dependencies during
         # interpolation
@@ -181,10 +181,12 @@ class Parameters(object):
             if isinstance(v, dict):
                 self._interpolate_functions_inner(node[k], inventory)
             elif isinstance(v, types.StringTypes):
-                refval = RefFunction(v)
+                refval = ReferenceStringFunction(v)
                 if refval.has_references():
-                    ret = refval.render(inventory)
-                    node[k] = ret
+                    try:
+                        node[k] = refval.render(inventory)
+                    except UndefinedFunctionError as e:
+                        raise UndefinedFunctionError(e.var)
 
     def interpolate(self):
         while self.has_unresolved_refs():
@@ -197,47 +199,38 @@ class Parameters(object):
     def _interpolate_inner(self, path, refvalue):
         self._occurrences[path] = True  # mark as seen
         for ref in refvalue.get_references():
-            if isinstance(ref, ReferenceParameter):
-                paths_from_ref = ref.get_dependencies(delim=self.delimiter)
-                for path_from_ref in paths_from_ref:
-                    try:
-                        refvalue_inner = self._occurrences[path_from_ref]
+            path_from_ref = DictPath(self.delimiter, ref.string)
+            try:
+                refvalue_inner = self._occurrences[path_from_ref]
 
-                        # If there is no reference, then this will throw a KeyError,
-                        # look further down where this is caught and execution passed
-                        # to the next iteration of the loop
-                        #
-                        # If we get here, then the ref references another parameter,
-                        # requiring us to recurse, dereferencing first those refs that
-                        # are most used and are thus at the leaves of the dependency
-                        # tree.
+                # If there is no reference, then this will throw a KeyError,
+                # look further down where this is caught and execution passed
+                # to the next iteration of the loop
+                #
+                # If we get here, then the ref references another parameter,
+                # requiring us to recurse, dereferencing first those refs that
+                # are most used and are thus at the leaves of the dependency
+                # tree.
 
-                        if refvalue_inner is True:
-                            # every call to _interpolate_inner replaces the value of
-                            # the saved occurrences of a reference with True.
-                            # Therefore, if we encounter True instead of a refvalue,
-                            # it means that we have already processed it and are now
-                            # faced with a cyclical reference.
-                            raise InfiniteRecursionError(path, ref.string)
-                        self._interpolate_inner(path_from_ref, refvalue_inner)
+                if refvalue_inner is True:
+                    # every call to _interpolate_inner replaces the value of
+                    # the saved occurrences of a reference with True.
+                    # Therefore, if we encounter True instead of a refvalue,
+                    # it means that we have already processed it and are now
+                    # faced with a cyclical reference.
+                    raise InfiniteRecursionError(path, ref.string)
+                self._interpolate_inner(path_from_ref, refvalue_inner)
 
-                    except KeyError as e:
-                        # not actually an error, but we are done resolving all
-                        # dependencies of the current ref, so move on
-                        continue
+            except KeyError as e:
+                # not actually an error, but we are done resolving all
+                # dependencies of the current ref, so move on
+                continue
         try:
-            if isinstance(ref, ReferenceFunction):
-                # we cannot render functions yet, because they need access to the
-                # complete inventory
-                pass
-            else:
-                new = refvalue.render(self._base)
-                path.set_value(self._base, new)
+            new = refvalue.render(self._base)
+            path.set_value(self._base, new)
 
             # finally, remove the reference from the occurrences cache
             del self._occurrences[path]
         except UndefinedVariableError as e:
             raise UndefinedVariableError(e.var, path)
-        except UndefinedFunctionError as e:
-            raise UndefinedFunctionError(e.var)
 

@@ -11,7 +11,7 @@ import posix, sys
 import traceback
 
 from reclass.defaults import (PARAMETER_INTERPOLATION_SENTINELS,
-FUNCTION_INTERPOLATION_SENTINELS)
+                              FUNCTION_INTERPOLATION_SENTINELS)
 
 class ReclassException(Exception):
 

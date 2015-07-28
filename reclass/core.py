@@ -15,7 +15,6 @@ import fnmatch
 import shlex
 from reclass.datatypes import Entity, Classes, Parameters
 from reclass.errors import MappingFormatError, ClassNotFound
-from reclass.utils.refvalue import RefValue
 
 class Core(object):
 
@@ -144,11 +143,12 @@ class Core(object):
             entities[n] = self._nodeinfo(n)
 
         # second run, function are executed
-        all_parameters = {}
-        for nodename, info in entities.items():
-            all_parameters.update({nodename: info.parameters})
+        #all_parameters = {}
+        #for nodename, info in entities.items():
+        #    all_parameters.update({nodename: info.parameters})
         for nodename, node in entities.items():
-            node.expand_functions(inventory=all_parameters)
+            node.expand_functions(inventory=entities)
+
         nodes = {}
         applications = {}
         classes = {}

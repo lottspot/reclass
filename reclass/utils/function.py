@@ -31,7 +31,7 @@ class FunctionPrint(Function):
     def __init__(self):
         super(FunctionPrint, self).__init__()
 
-    def execute(self, additional_info, *args):
+    def execute(self, inventory, *args):
         return " ".join(args)
 
 
@@ -39,21 +39,18 @@ class FunctionAggregate(Function):
     def __init__(self):
         super(FunctionAggregate, self).__init__()
 
-    def execute(self, additional_info, *args):
+    def execute(self, inventory, *args):
         func_filter, func_extract = args[0:2]
-        hosts = additional_info
         result = {}
         matching_hosts = {}
-        for hostname, hostinfo in additional_info.items():
-            hostinfo = hostinfo._base
-            expr = func_filter.replace("node", "hostinfo")
+        for hostname, hostinfo in inventory.items():
+            node = hostinfo.parameters.as_dict()
             try:
-                if eval(expr):
-                    matching_hosts.update({hostname: hostinfo})
+                if eval(func_filter):
+                    matching_hosts.update({hostname: node})
                 for hostname, hostinfo in matching_hosts.items():
                     expr = func_extract.replace("node", "hostinfo")
                     result[hostname] = eval(expr)
             except KeyError:
                 raise
-
         return result
