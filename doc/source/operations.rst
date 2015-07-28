@@ -206,3 +206,7 @@ Note that parameter interpolation can be used inside functions, but one has to
 pay attention to proper quoting::
 
   hosts: $<aggregate(node['domain'] == "${network:domain}", node['ip'])>
+
+Note that chained references are not supported: If the result of a function
+contains a function itself, this function will not be interpolated, but taken
+verbatim. This also prevents circular references.
