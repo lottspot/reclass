@@ -15,6 +15,8 @@ def get_function(name):
         return FunctionPrint()
     if name == 'aggregate':
         return FunctionAggregate()
+    if name == 'get':
+        return FunctionGet()
     else:
         raise UndefinedFunctionError(name)
 
@@ -54,3 +56,13 @@ class FunctionAggregate(Function):
             except KeyError:
                 raise
         return result
+
+class FunctionGet(Function):
+    def __init__(self):
+        super(FunctionGet, self).__init__()
+
+    def execute(self, inventory, *args):
+        nodename, func_extract = args[0:2]
+        print inventory.keys()
+        node = inventory[nodename].parameters.as_dict()
+        return eval(func_extract)
