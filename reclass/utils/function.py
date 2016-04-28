@@ -17,6 +17,8 @@ def get_function(name):
         return FunctionAggregate()
     if name == 'get':
         return FunctionGet()
+    if name == 'list':
+        return FunctionList()
     else:
         raise UndefinedFunctionError(name)
 
@@ -66,3 +68,16 @@ class FunctionGet(Function):
         print inventory.keys()
         node = inventory[nodename].parameters.as_dict()
         return eval(func_extract)
+
+class FunctionList(Function):
+    def __init__(self):
+        super(FunctionList, self).__init__()
+
+    def execute(self, inventory, *args):
+        func_filter, func_extract = args[0:2]
+        result = []
+        for hostname, hostinfo in inventory.items():
+            node = hostinfo.parameters.as_dict()
+            if eval(func_filter):
+                result.append(eval(func_extract))
+        return result
