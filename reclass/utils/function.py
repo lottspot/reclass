@@ -65,7 +65,6 @@ class FunctionGet(Function):
 
     def execute(self, inventory, *args):
         nodename, func_extract = args[0:2]
-        print inventory.keys()
         node = inventory[nodename].parameters.as_dict()
         return eval(func_extract)
 
