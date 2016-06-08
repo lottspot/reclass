@@ -8,7 +8,7 @@
     
     <title>Using reclass &mdash; reclass 1.4.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="External references" href="refs.html" />
     <link rel="prev" title="reclass operations" href="operations.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,37 +40,39 @@
         <li class="right" >
           <a href="operations.html" title="reclass operations"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="using-reclass">
 <h1>Using reclass<a class="headerlink" href="#using-reclass" title="Permalink to this headline">¶</a></h1>
-<p>For information on how to use <strong>reclass</strong> directly, call <tt class="docutils literal"><span class="pre">reclass</span> <span class="pre">--help</span></tt>
-and study the output, or have a look at its <a class="reference internal" href="manpage.html"><em>manual page</em></a>.</p>
-<p>The three options, <tt class="docutils literal"><span class="pre">--inventory-base-uri</span></tt>, <tt class="docutils literal"><span class="pre">--nodes-uri</span></tt>, and
-<tt class="docutils literal"><span class="pre">--classes-uri</span></tt> together specify the location of the inventory. If the base
+<div class="section" id="command-line-interface">
+<h2>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h2>
+<p>For information on how to use <strong>reclass</strong> directly, call <code class="docutils literal"><span class="pre">reclass</span> <span class="pre">--help</span></code>
+and study the output, or have a look at its <a class="reference internal" href="manpage.html"><span class="doc">manual page</span></a>.</p>
+<p>The three options, <code class="docutils literal"><span class="pre">--inventory-base-uri</span></code>, <code class="docutils literal"><span class="pre">--nodes-uri</span></code>, and
+<code class="docutils literal"><span class="pre">--classes-uri</span></code> together specify the location of the inventory. If the base
 URI is specified, then it is prepended to the other two URIs, unless they are
-absolute URIs. If these two URIs are not specified, they default to <tt class="docutils literal"><span class="pre">nodes</span></tt>
-and <tt class="docutils literal"><span class="pre">classes</span></tt>. Therefore, if your inventory is in <tt class="docutils literal"><span class="pre">/etc/reclass/nodes</span></tt> and
-<tt class="docutils literal"><span class="pre">/etc/reclass/classes</span></tt>, all you need to specify is the base URI as
-<tt class="docutils literal"><span class="pre">/etc/reclass</span></tt> — which is actually the default (specified in
-<tt class="docutils literal"><span class="pre">reclass/defaults.py</span></tt>).</p>
-<p>If you&#8217;ve installed <strong>reclass</strong> from source as per the <a class="reference internal" href="install.html"><em>installation
-instructions</em></a>, try to run it from the source directory like this:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ reclass -b examples/ --inventory
+absolute URIs. If these two URIs are not specified, they default to <code class="docutils literal"><span class="pre">nodes</span></code>
+and <code class="docutils literal"><span class="pre">classes</span></code>. Therefore, if your inventory is in <code class="docutils literal"><span class="pre">/etc/reclass/nodes</span></code> and
+<code class="docutils literal"><span class="pre">/etc/reclass/classes</span></code>, all you need to specify is the base URI as
+<code class="docutils literal"><span class="pre">/etc/reclass</span></code> — which is actually the default (specified in
+<code class="docutils literal"><span class="pre">reclass/defaults.py</span></code>).</p>
+<p>If you&#8217;ve installed <strong>reclass</strong> from source as per the <a class="reference internal" href="install.html"><span class="doc">installation
+instructions</span></a>, try to run it from the source directory like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ reclass -b examples/ --inventory
 $ reclass -b examples/ --nodeinfo localhost
 </pre></div>
 </div>
-<p>This will make it use the data from <tt class="docutils literal"><span class="pre">examples/nodes</span></tt> and
-<tt class="docutils literal"><span class="pre">examples/classes</span></tt>, and you can surely make your own way from here.</p>
+<p>This will make it use the data from <code class="docutils literal"><span class="pre">examples/nodes</span></code> and
+<code class="docutils literal"><span class="pre">examples/classes</span></code>, and you can surely make your own way from here.</p>
 <p>On Debian-systems, use the following:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ reclass -b /usr/share/doc/reclass/examples/ --inventory
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ reclass -b /usr/share/doc/reclass/examples/ --inventory
 $ reclass -b /usr/share/doc/reclass/examples/ --nodeinfo localhost
 </pre></div>
 </div>
@@ -79,39 +81,126 @@ so-called adapters. The job of an adapter is to translate between different
 invocation paradigms, provide a sane set of default options, and massage the
 data from <strong>reclass</strong> into the format expected by the automation tool in use.
 Please have a look at the respective README files for these adapters, i.e.
-for <a class="reference internal" href="salt.html"><em>Salt</em></a>, for <a class="reference internal" href="ansible.html"><em>Ansible</em></a>, and for <a class="reference internal" href="puppet.html"><em>Puppet</em></a>.</p>
+for <a class="reference internal" href="salt.html"><span class="doc">Salt</span></a>, for <a class="reference internal" href="ansible.html"><span class="doc">Ansible</span></a>, and for <a class="reference internal" href="puppet.html"><span class="doc">Puppet</span></a>.</p>
+</div>
+<div class="section" id="python">
+<h2>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
+<p>More verbose example how you can use reclass directly from python.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">from</span> <span class="nn">reclass</span> <span class="kn">import</span> <span class="n">get_storage</span><span class="p">,</span> <span class="n">output</span>
+<span class="kn">from</span> <span class="nn">reclass.core</span> <span class="kn">import</span> <span class="n">Core</span>
+
+<span class="c1"># note: all this stuff can be imported from reclass.defaults import *</span>
+<span class="n">STORAGE_TYPE</span> <span class="o">=</span> <span class="s1">&#39;yaml_fs&#39;</span>
+<span class="n">NODES_URI</span> <span class="o">=</span> <span class="s1">&#39;nodes&#39;</span>
+<span class="n">CLASSES_URI</span> <span class="o">=</span> <span class="s1">&#39;classes&#39;</span>
+<span class="n">PRETTY_PRINT</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">OUTPUT</span> <span class="o">=</span> <span class="s1">&#39;yaml&#39;</span>
+<span class="n">RECLASS_NAME</span> <span class="o">=</span> <span class="s2">&quot;reclass&quot;</span>
+
+<span class="n">RECLASS_DIR</span> <span class="o">=</span> <span class="s2">&quot;/srv/reclass&quot;</span>
+
+<span class="n">node_uri</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">RECLASS_DIR</span><span class="p">,</span> <span class="n">RECLASS_NAME</span><span class="p">,</span> <span class="n">NODES_URI</span><span class="p">]</span>
+<span class="n">classes_uri</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">RECLASS_DIR</span><span class="p">,</span> <span class="n">RECLASS_NAME</span><span class="p">,</span> <span class="n">CLASSES_URI</span><span class="p">]</span>
+
+<span class="n">storage</span> <span class="o">=</span> <span class="n">get_storage</span><span class="p">(</span><span class="n">STORAGE_TYPE</span><span class="p">,</span> <span class="n">node_uri</span><span class="p">,</span> <span class="n">classes_uri</span><span class="p">)</span>
+
+<span class="n">reclass</span> <span class="o">=</span> <span class="n">Core</span><span class="p">(</span><span class="n">storage</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="n">nodes</span> <span class="o">=</span> <span class="n">reclass</span><span class="o">.</span><span class="n">inventory</span><span class="p">()[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]</span>
+
+<span class="k">print</span> <span class="n">output</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">,</span> <span class="n">PRETTY_PRINT</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>With this simple class can you manage X reclasses in one directory. Easily can you extend this class how you want.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">from</span> <span class="nn">reclass</span> <span class="kn">import</span> <span class="n">get_storage</span><span class="p">,</span> <span class="n">output</span>
+<span class="kn">from</span> <span class="nn">reclass.core</span> <span class="kn">import</span> <span class="n">Core</span>
+<span class="kn">from</span> <span class="nn">reclass.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">RECLASS_DIR</span> <span class="o">=</span> <span class="s2">&quot;/srv/reclass&quot;</span>
+
+<span class="k">class</span> <span class="nc">ReclassUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">get_reclass</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;return instance of reclass</span>
+<span class="sd">        output(get_reclass(&quot;reclass&quot;).nodeinfo(&quot;foo.bar.cz&quot;), &quot;json&quot;. PRETTY_PRINT)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">storage</span> <span class="o">=</span> <span class="n">get_storage</span><span class="p">(</span><span class="n">STORAGE_TYPE</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">RECLASS_DIR</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">NODES_URI</span><span class="p">]),</span>
+                              <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">RECLASS_DIR</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">CLASSES_URI</span><span class="p">]))</span>
+
+        <span class="n">reclass</span> <span class="o">=</span> <span class="n">Core</span><span class="p">(</span><span class="n">storage</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">reclass</span>
+
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reclass</span><span class="p">):</span>
+        <span class="n">reclass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reclass</span><span class="p">(</span><span class="n">reclass</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">reclass</span><span class="o">.</span><span class="n">inventory</span><span class="p">()[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">applications</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reclass</span><span class="p">):</span>
+        <span class="n">reclass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reclass</span><span class="p">(</span><span class="n">reclass</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">reclass</span><span class="o">.</span><span class="n">inventory</span><span class="p">()[</span><span class="s2">&quot;applications&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reclass</span><span class="p">):</span>
+        <span class="n">reclass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reclass</span><span class="p">(</span><span class="n">reclass</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">reclass</span><span class="o">.</span><span class="n">inventory</span><span class="p">()[</span><span class="s2">&quot;classes&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">nodeinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reclass</span><span class="p">,</span> <span class="n">node_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reclass</span><span class="p">(</span><span class="n">reclass</span><span class="p">)</span><span class="o">.</span><span class="n">nodeinfo</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span>
+
+<span class="n">reclass_utils</span> <span class="o">=</span> <span class="n">ReclassUtils</span><span class="p">()</span>
+
+<span class="c1"># print all nodes</span>
+<span class="k">print</span> <span class="n">reclass_utils</span><span class="o">.</span><span class="n">get_reclass</span><span class="p">(</span><span class="s2">&quot;reclass&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">inventory</span><span class="p">()[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]</span>
+
+<span class="c1"># less verbose example</span>
+<span class="k">print</span> <span class="n">reclass_utils</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="s2">&quot;reclass&quot;</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="n">reclass_utils</span><span class="o">.</span><span class="n">nodeinfo</span><span class="p">(</span><span class="s2">&quot;reclass&quot;</span><span class="p">,</span> <span class="s2">&quot;foo.bar.cz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using reclass</a><ul>
+<li><a class="reference internal" href="#command-line-interface">Command Line Interface</a></li>
+<li><a class="reference internal" href="#python">Python</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="operations.html"
                         title="previous chapter">reclass operations</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="refs.html"
                         title="next chapter">External references</a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -123,12 +212,12 @@ for <a class="reference internal" href="salt.html"><em>Salt</em></a>, for <a cla
         <li class="right" >
           <a href="operations.html" title="reclass operations"
              >previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, martin f. krafft.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

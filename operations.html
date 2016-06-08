@@ -8,7 +8,7 @@
     
     <title>reclass operations &mdash; reclass 1.4.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="Using reclass" href="usage.html" />
     <link rel="prev" title="reclass concepts" href="concepts.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,24 +40,24 @@
         <li class="right" >
           <a href="concepts.html" title="reclass concepts"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="reclass-operations">
 <h1>reclass operations<a class="headerlink" href="#reclass-operations" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="yaml-fs-storage">
 <h2>YAML FS storage<a class="headerlink" href="#yaml-fs-storage" title="Permalink to this headline">¶</a></h2>
 <p>While <strong>reclass</strong> has been built to support different storage backends through
-plugins, currently only the <tt class="docutils literal"><span class="pre">yaml_fs</span></tt> storage backend exists. This is a very
+plugins, currently only the <code class="docutils literal"><span class="pre">yaml_fs</span></code> storage backend exists. This is a very
 simple, yet powerful, YAML-based backend, using flat files on the filesystem
-(as suggested by the <tt class="docutils literal"><span class="pre">_fs</span></tt> postfix).</p>
-<p><tt class="docutils literal"><span class="pre">yaml_fs</span></tt> works with two directories, one for node definitions, and another
+(as suggested by the <code class="docutils literal"><span class="pre">_fs</span></code> postfix).</p>
+<p><code class="docutils literal"><span class="pre">yaml_fs</span></code> works with two directories, one for node definitions, and another
 for class definitions. The two directories must not be the same, nor can one
 be a parent of the other.</p>
 <p>Files in those directories are YAML-files, specifying key-value pairs. The
@@ -78,10 +78,10 @@ following three keys are read by <strong>reclass</strong>:</p>
 </tr>
 <tr class="row-odd"><td>appliations</td>
 <td>a list of applications to append to the applications defined by
-ancestors. If an application name starts with <tt class="docutils literal"><span class="pre">~</span></tt>, it would
+ancestors. If an application name starts with <code class="docutils literal"><span class="pre">~</span></code>, it would
 remove this application from the list, if it had already been
 added — but it does not prevent a future addition.
-E.g. <tt class="docutils literal"><span class="pre">~firewalled</span></tt></td>
+E.g. <code class="docutils literal"><span class="pre">~firewalled</span></code></td>
 </tr>
 <tr class="row-even"><td>parameters</td>
 <td><p class="first">key-value pairs to set defaults in class definitions, override
@@ -90,11 +90,11 @@ specifications.
 By convention, parameters corresponding to an application
 should be provided as subkey-value pairs, keyed by the name of
 the application, e.g.:</p>
-<div class="last highlight-python"><div class="highlight"><pre>applications:
-- ssh.server
-parameters:
-  ssh.server:
-    permit_root_login: no
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">applications</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">ssh</span><span class="o">.</span><span class="n">server</span>
+<span class="n">parameters</span><span class="p">:</span>
+  <span class="n">ssh</span><span class="o">.</span><span class="n">server</span><span class="p">:</span>
+    <span class="n">permit_root_login</span><span class="p">:</span> <span class="n">no</span>
 </pre></div>
 </div>
 </td>
@@ -106,9 +106,9 @@ into which the node definition is supposed to be place.</td>
 </tbody>
 </table>
 <p>Classes files may reside in subdirectories, which act as namespaces. For
-instance, a class <tt class="docutils literal"><span class="pre">ssh.server</span></tt> will result in the class definition to be
-read from <tt class="docutils literal"><span class="pre">ssh/server.yml</span></tt>. Specifying just <tt class="docutils literal"><span class="pre">ssh</span></tt> will cause the class
-data to be read from <tt class="docutils literal"><span class="pre">ssh/init.yml</span></tt> or <tt class="docutils literal"><span class="pre">ssh.yml</span></tt>. Note, however, that only
+instance, a class <code class="docutils literal"><span class="pre">ssh.server</span></code> will result in the class definition to be
+read from <code class="docutils literal"><span class="pre">ssh/server.yml</span></code>. Specifying just <code class="docutils literal"><span class="pre">ssh</span></code> will cause the class
+data to be read from <code class="docutils literal"><span class="pre">ssh/init.yml</span></code> or <code class="docutils literal"><span class="pre">ssh.yml</span></code>. Note, however, that only
 one of those two may be present.</p>
 <p>Nodes may also be defined in subdirectories. However, node names (filename)
 must be unique across all subdirectories, and <strong>reclass</strong> will exit with an
@@ -143,18 +143,18 @@ returns the final result.</p>
 </div>
 <div class="section" id="wildcard-regexp-mappings">
 <h2>Wildcard/Regexp mappings<a class="headerlink" href="#wildcard-regexp-mappings" title="Permalink to this headline">¶</a></h2>
-<p>Using the <a class="reference internal" href="configfile.html"><em>configuration file</em></a>, it is also possible to
+<p>Using the <a class="reference internal" href="configfile.html"><span class="doc">configuration file</span></a>, it is also possible to
 provide a list mappings between node names and classes. For instance:</p>
-<div class="highlight-python"><div class="highlight"><pre>class_mappings:
-  - \* default
-  - /^www\d+/ webserver
-  - \*.ch hosted@switzerland another_class_to_show_that_it_can_take_lists
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">class_mappings</span><span class="p">:</span>
+  <span class="o">-</span> \<span class="o">*</span> <span class="n">default</span>
+  <span class="o">-</span> <span class="o">/^</span><span class="n">www</span>\<span class="n">d</span><span class="o">+/</span> <span class="n">webserver</span>
+  <span class="o">-</span> \<span class="o">*.</span><span class="n">ch</span> <span class="n">hosted</span><span class="nd">@switzerland</span> <span class="n">another_class_to_show_that_it_can_take_lists</span>
 </pre></div>
 </div>
-<p>This will assign the <tt class="docutils literal"><span class="pre">default</span></tt> class to all nodes (make sure to escape
-a leading asterisk (*) to keep YAML happy), <tt class="docutils literal"><span class="pre">webserver</span></tt> to all nodes named
-<tt class="docutils literal"><span class="pre">www1</span></tt> or <tt class="docutils literal"><span class="pre">www999</span></tt>, and <tt class="docutils literal"><span class="pre">hosted-in-switzerland</span></tt> to all nodes whose names
-end with <tt class="docutils literal"><span class="pre">.ch</span></tt> (again, note the escaped leading asterisk). Multiple classes
+<p>This will assign the <code class="docutils literal"><span class="pre">default</span></code> class to all nodes (make sure to escape
+a leading asterisk (*) to keep YAML happy), <code class="docutils literal"><span class="pre">webserver</span></code> to all nodes named
+<code class="docutils literal"><span class="pre">www1</span></code> or <code class="docutils literal"><span class="pre">www999</span></code>, and <code class="docutils literal"><span class="pre">hosted-in-switzerland</span></code> to all nodes whose names
+end with <code class="docutils literal"><span class="pre">.ch</span></code> (again, note the escaped leading asterisk). Multiple classes
 can be assigned to each mapping by providing a space-separated list (class
 names cannot contain spaces anyway).</p>
 <div class="admonition warning">
@@ -171,23 +171,23 @@ define all nodes (and if only to allow them to be enumerated for the
 inventory).</p>
 <p>The mapped classes can also contain backreferences when regular expressions
 are used, although they need to be escaped, e.g.:</p>
-<div class="highlight-python"><div class="highlight"><pre>class_mappings:
+<div class="highlight-default"><div class="highlight"><pre><span></span>class_mappings:
   - /\.(\S+)$/ tld-\\1
 </pre></div>
 </div>
 <p>Furthermore, since the outer slashes (&#8216;/&#8217;) are used to &#8220;quote&#8221; the regular
 expression, <em>any</em> slashes within the regular expression must be escaped. For
-instance, the following class mapping assigns a <tt class="docutils literal"><span class="pre">subdir-X</span></tt> class to all
+instance, the following class mapping assigns a <code class="docutils literal"><span class="pre">subdir-X</span></code> class to all
 nodes that are defined in a subdirectory (using yaml_fs):</p>
-<div class="highlight-python"><div class="highlight"><pre>class_mappings:
-  - /^([^\/]+)\// subdir-\\1
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">class_mappings</span><span class="p">:</span>
+  <span class="o">-</span> <span class="o">/^</span><span class="p">([</span><span class="o">^</span>\<span class="o">/</span><span class="p">]</span><span class="o">+</span><span class="p">)</span>\<span class="o">//</span> <span class="n">subdir</span><span class="o">-</span>\\<span class="mi">1</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="parameter-interpolation">
 <h2>Parameter interpolation<a class="headerlink" href="#parameter-interpolation" title="Permalink to this headline">¶</a></h2>
 <p>Parameters may reference each other, including deep references, e.g.:</p>
-<div class="highlight-python"><div class="highlight"><pre>parameters:
+<div class="highlight-default"><div class="highlight"><pre><span></span>parameters:
   location: Munich, Germany
   motd:
     header: This node sits in ${location}
@@ -196,11 +196,67 @@ nodes that are defined in a subdirectory (using yaml_fs):</p>
 </pre></div>
 </div>
 <p>After merging and interpolation, which happens automatically inside the
-storage modules, the <tt class="docutils literal"><span class="pre">for_demonstration</span></tt> parameter will have a value of
+storage modules, the <code class="docutils literal"><span class="pre">for_demonstration</span></code> parameter will have a value of
 &#8220;This node sits in Munich, Germany&#8221;.</p>
 <p>Types are preserved if the value contains nothing but a reference. Hence, the
-value of <tt class="docutils literal"><span class="pre">dict_reference</span></tt> will actually be a dictionary.</p>
-<p>You should now be ready to <a class="reference internal" href="usage.html"><em>use reclass</em></a>!</p>
+value of <code class="docutils literal"><span class="pre">dict_reference</span></code> will actually be a dictionary.</p>
+<p>You should now be ready to <a class="reference internal" href="usage.html"><span class="doc">use reclass</span></a>!</p>
+</div>
+<div class="section" id="function-interpolation">
+<h2>Function interpolation<a class="headerlink" href="#function-interpolation" title="Permalink to this headline">¶</a></h2>
+<p>Certain functions can be used to dynamically generate values. They are specified
+like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>parameters:
+  key: $&lt;function(argument1, argument2, ...)&gt;
+</pre></div>
+</div>
+<p>The following functions are supported:</p>
+<div class="section" id="print">
+<h3>print<a class="headerlink" href="#print" title="Permalink to this headline">¶</a></h3>
+<p>This function simply concatenates all its parameters and returns a string. For
+example, take this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>test: $&lt;print(first, second, third)&gt;
+</pre></div>
+</div>
+<p>which results in this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">test</span><span class="p">:</span> <span class="s2">&quot;first second third&quot;</span>
+</pre></div>
+</div>
+<p>Yeah, it&#8217;s quite useless. Now to something a bit more useful:</p>
+</div>
+<div class="section" id="aggregate">
+<h3>aggregate<a class="headerlink" href="#aggregate" title="Permalink to this headline">¶</a></h3>
+<p>This can be used to extract values from hosts that satisfy certain conditions.
+The syntax looks like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">aggregate</span><span class="p">(</span><span class="nb">filter</span><span class="p">,</span> <span class="n">extractor</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">filter</span></code> parameter specifies the condition the host has to fulfil, and
+the <code class="docutils literal"><span class="pre">extractor</span></code> determines what will be taken from that host. Inside the
+function, <code class="docutils literal"><span class="pre">node</span></code> refers to all parameters of a node, and regular python
+dictionary functions can be used to access it.</p>
+<p>The return value is always a dictionary that maps the nodename to the extracted
+values.</p>
+<p>Here is an example that extracts the IP address of every host in our domain
+<code class="docutils literal"><span class="pre">example.com</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>hosts: $&lt;aggregate(node[&#39;domain&#39;] == &#39;example.com&#39;, node[&#39;ip&#39;])&gt;
+</pre></div>
+</div>
+<p>which might result in something like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">hosts</span><span class="p">:</span>
+  <span class="n">first</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="p">:</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.1</span>
+  <span class="n">second</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="p">:</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.2</span>
+</pre></div>
+</div>
+<p>Note that parameter interpolation can be used inside functions, but one has to
+pay attention to proper quoting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>hosts: $&lt;aggregate(node[&#39;domain&#39;] == &quot;${network:domain}&quot;, node[&#39;ip&#39;])&gt;
+</pre></div>
+</div>
+<p>Note that chained references are not supported: If the result of a function
+contains a function itself, this function will not be interpolated, but taken
+verbatim. This also prevents circular references.</p>
+</div>
 </div>
 </div>
 
@@ -208,7 +264,7 @@ value of <tt class="docutils literal"><span class="pre">dict_reference</span></t
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -217,6 +273,11 @@ value of <tt class="docutils literal"><span class="pre">dict_reference</span></t
 <li><a class="reference internal" href="#data-merging">Data merging</a></li>
 <li><a class="reference internal" href="#wildcard-regexp-mappings">Wildcard/Regexp mappings</a></li>
 <li><a class="reference internal" href="#parameter-interpolation">Parameter interpolation</a></li>
+<li><a class="reference internal" href="#function-interpolation">Function interpolation</a><ul>
+<li><a class="reference internal" href="#print">print</a></li>
+<li><a class="reference internal" href="#aggregate">aggregate</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -227,24 +288,21 @@ value of <tt class="docutils literal"><span class="pre">dict_reference</span></t
   <h4>Next topic</h4>
   <p class="topless"><a href="usage.html"
                         title="next chapter">Using reclass</a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -256,12 +314,12 @@ value of <tt class="docutils literal"><span class="pre">dict_reference</span></t
         <li class="right" >
           <a href="concepts.html" title="reclass concepts"
              >previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, martin f. krafft.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

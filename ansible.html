@@ -8,7 +8,7 @@
     
     <title>Using reclass with Ansible &mdash; reclass 1.4.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="Using reclass with Puppet" href="puppet.html" />
     <link rel="prev" title="Using reclass with Salt" href="salt.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,14 +40,14 @@
         <li class="right" >
           <a href="salt.html" title="Using reclass with Salt"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="using-reclass-with-ansible">
 <h1>Using reclass with Ansible<a class="headerlink" href="#using-reclass-with-ansible" title="Permalink to this headline">¶</a></h1>
@@ -60,48 +60,48 @@ anymore. If you use it and have changes, I will take your patch.</p>
 <div class="section" id="quick-start-with-ansible">
 <h2>Quick start with Ansible<a class="headerlink" href="#quick-start-with-ansible" title="Permalink to this headline">¶</a></h2>
 <p>The following steps should get you up and running quickly with <strong>reclass</strong> and
-<a class="reference external" href="http://www.ansibleworks.com">Ansible</a>. Generally, we will be working in <tt class="docutils literal"><span class="pre">/etc/ansible</span></tt>. However, if you
+<a class="reference external" href="http://www.ansibleworks.com">Ansible</a>. Generally, we will be working in <code class="docutils literal"><span class="pre">/etc/ansible</span></code>. However, if you
 are using a source-code checkout of Ansible, you might also want to work
-inside the <tt class="docutils literal"><span class="pre">./hacking</span></tt> directory instead.</p>
-<p>Or you can also just look into <tt class="docutils literal"><span class="pre">./examples/ansible</span></tt> of your <strong>reclass</strong>
+inside the <code class="docutils literal"><span class="pre">./hacking</span></code> directory instead.</p>
+<p>Or you can also just look into <code class="docutils literal"><span class="pre">./examples/ansible</span></code> of your <strong>reclass</strong>
 checkout, where the following steps have already been prepared.</p>
 <p>/…/reclass refers to the location of your <strong>reclass</strong> checkout.</p>
 <ol class="arabic">
-<li><p class="first">Complete the installation steps described in the <a class="reference internal" href="install.html"><em>installation section</em></a>.</p>
+<li><p class="first">Complete the installation steps described in the <a class="reference internal" href="install.html"><span class="doc">installation section</span></a>.</p>
 </li>
-<li><p class="first">Symlink <tt class="docutils literal"><span class="pre">/usr/share/reclass/reclass-ansible</span></tt> (or wherever your distro put
-that file), or <tt class="docutils literal"><span class="pre">/…/reclass/reclass/adapters/ansible.py</span></tt> (if running from
-source) to <tt class="docutils literal"><span class="pre">/etc/ansible/hosts</span></tt> (or <tt class="docutils literal"><span class="pre">./hacking/hosts</span></tt>).</p>
+<li><p class="first">Symlink <code class="docutils literal"><span class="pre">/usr/share/reclass/reclass-ansible</span></code> (or wherever your distro put
+that file), or <code class="docutils literal"><span class="pre">/…/reclass/reclass/adapters/ansible.py</span></code> (if running from
+source) to <code class="docutils literal"><span class="pre">/etc/ansible/hosts</span></code> (or <code class="docutils literal"><span class="pre">./hacking/hosts</span></code>).</p>
 </li>
-<li><p class="first">Copy the two directories <tt class="docutils literal"><span class="pre">nodes</span></tt> and <tt class="docutils literal"><span class="pre">classes</span></tt> from the example
-subdirectory in the <strong>reclass</strong> checkout to <tt class="docutils literal"><span class="pre">/etc/ansible</span></tt></p>
+<li><p class="first">Copy the two directories <code class="docutils literal"><span class="pre">nodes</span></code> and <code class="docutils literal"><span class="pre">classes</span></code> from the example
+subdirectory in the <strong>reclass</strong> checkout to <code class="docutils literal"><span class="pre">/etc/ansible</span></code></p>
 <p>If you prefer to put those directories elsewhere, you can create
-<tt class="docutils literal"><span class="pre">/etc/ansible/reclass-config.yml</span></tt> with contents such as:</p>
-<div class="highlight-python"><div class="highlight"><pre>storage_type: yaml_fs
-inventory_base_uri: /srv/reclass
+<code class="docutils literal"><span class="pre">/etc/ansible/reclass-config.yml</span></code> with contents such as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">storage_type</span><span class="p">:</span> <span class="n">yaml_fs</span>
+<span class="n">inventory_base_uri</span><span class="p">:</span> <span class="o">/</span><span class="n">srv</span><span class="o">/</span><span class="n">reclass</span>
 </pre></div>
 </div>
-<p>Note that <tt class="docutils literal"><span class="pre">yaml_fs</span></tt> is currently the only supported <tt class="docutils literal"><span class="pre">storage_type</span></tt>, and
+<p>Note that <code class="docutils literal"><span class="pre">yaml_fs</span></code> is currently the only supported <code class="docutils literal"><span class="pre">storage_type</span></code>, and
 it&#8217;s the default if you don&#8217;t set it.</p>
 </li>
 <li><p class="first">Check out your inventory by invoking</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ./hosts --list
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ./hosts --list
 </pre></div>
 </div>
 <p>which should return 5 groups in JSON format, and each group has exactly
-one member <tt class="docutils literal"><span class="pre">localhost</span></tt>.</p>
+one member <code class="docutils literal"><span class="pre">localhost</span></code>.</p>
 </li>
 </ol>
 <ol class="arabic" start="4">
-<li><p class="first">See the node information for <tt class="docutils literal"><span class="pre">localhost</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ./hosts --host localhost
+<li><p class="first">See the node information for <code class="docutils literal"><span class="pre">localhost</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ./hosts --host localhost
 </pre></div>
 </div>
 <p>This should print a set of keys and values, including a greeting,
-a colour, and a sub-class called <tt class="docutils literal"><span class="pre">__reclas__</span></tt>.</p>
+a colour, and a sub-class called <code class="docutils literal"><span class="pre">__reclas__</span></code>.</p>
 </li>
 <li><p class="first">Execute some ansible commands, e.g.:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ansible -i hosts \* --list-hosts
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ansible -i hosts \* --list-hosts
 $ ansible -i hosts \* -m ping
 $ ansible -i hosts \* -m debug -a &#39;msg=&quot;${greeting}&quot;&#39;
 $ ansible -i hosts \* -m setup
@@ -111,7 +111,7 @@ $ ansible-playbook -i hosts test.yml
 </li>
 <li><p class="first">You can also invoke <strong>reclass</strong> directly, which gives a slightly different
 view onto the same data, i.e. before it has been adapted for Ansible:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ /…/reclass/reclass.py --pretty-print --inventory
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ /…/reclass/reclass.py --pretty-print --inventory
 $ /…/reclass/reclass.py --pretty-print --nodeinfo localhost
 </pre></div>
 </div>
@@ -151,14 +151,14 @@ Ansible. Crudely, the following mapping exists:</p>
 </tr>
 </tbody>
 </table>
-<p><strong>reclass</strong> does not provide any <tt class="docutils literal"><span class="pre">group_vars</span></tt> because of its node-centric
+<p><strong>reclass</strong> does not provide any <code class="docutils literal"><span class="pre">group_vars</span></code> because of its node-centric
 perspective. While class definitions include parameters, those are inherited
 by the node definitions and hence become node_vars.</p>
 <p><strong>reclass</strong> also does not provide playbooks, nor does it deal with any of the
-related Ansible concepts, i.e. <tt class="docutils literal"><span class="pre">vars_files</span></tt>, vars, tasks, handlers, roles, etc..</p>
+related Ansible concepts, i.e. <code class="docutils literal"><span class="pre">vars_files</span></code>, vars, tasks, handlers, roles, etc..</p>
 <blockquote>
 <div>Let it be said at this point that you&#8217;ll probably want to stop using
-<tt class="docutils literal"><span class="pre">host_vars</span></tt>, <tt class="docutils literal"><span class="pre">group_vars</span></tt> and <tt class="docutils literal"><span class="pre">vars_files</span></tt> altogether, and if only
+<code class="docutils literal"><span class="pre">host_vars</span></code>, <code class="docutils literal"><span class="pre">group_vars</span></code> and <code class="docutils literal"><span class="pre">vars_files</span></code> altogether, and if only
 because you should no longer need them, but also because the variable
 precedence rules of Ansible are full of surprises, at least to me.</div></blockquote>
 <p><strong>reclass</strong>&#8216; Ansible adapter massage the <strong>reclass</strong> output into Ansible-usable data,
@@ -167,7 +167,7 @@ namely:</p>
 <li><p class="first">Every class in the ancestry of a node becomes a group to Ansible. This is
 mainly useful to be able to target nodes during interactive use of
 Ansible, e.g.:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ansible debiannode@wheezy -m command -a &#39;apt-get upgrade&#39;
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ansible debiannode@wheezy -m command -a &#39;apt-get upgrade&#39;
   → upgrade all Debian nodes running wheezy
 
 $ ansible ssh.server -m command -a &#39;invoke-rc.d ssh restart&#39;
@@ -178,19 +178,19 @@ $ ansible mailserver -m command -a &#39;tail -n1000 /var/log/mail.err&#39;
 </pre></div>
 </div>
 <p>The attentive reader might stumble over the use of singular words, whereas
-it might make more sense to address all <tt class="docutils literal"><span class="pre">mailserver*s*</span></tt> with this tool.
+it might make more sense to address all <code class="docutils literal"><span class="pre">mailserver*s*</span></code> with this tool.
 This is convention and up to you. I prefer to think of my node as
-a (singular) mailserver when I add <tt class="docutils literal"><span class="pre">mailserver</span></tt> to its parent classes.</p>
+a (singular) mailserver when I add <code class="docutils literal"><span class="pre">mailserver</span></code> to its parent classes.</p>
 </li>
 <li><p class="first">Every entry in the list of a host&#8217;s applications might well correspond to
 an Ansible playbook. Therefore, <strong>reclass</strong> creates a (Ansible-)group for
-every application, and adds <tt class="docutils literal"><span class="pre">_hosts</span></tt> to the name. This postfix can be
-configured with a CLI option (<tt class="docutils literal"><span class="pre">--applications-postfix</span></tt>) or in the
-configuration file (<tt class="docutils literal"><span class="pre">applications_postfix</span></tt>).</p>
+every application, and adds <code class="docutils literal"><span class="pre">_hosts</span></code> to the name. This postfix can be
+configured with a CLI option (<code class="docutils literal"><span class="pre">--applications-postfix</span></code>) or in the
+configuration file (<code class="docutils literal"><span class="pre">applications_postfix</span></code>).</p>
 <p>For instance, the ssh.server class adds the ssh.server application to
 a node&#8217;s application list. Now the admin might create an Ansible playbook
 like so:</p>
-<div class="highlight-python"><div class="highlight"><pre>- name: SSH server management
+<div class="highlight-default"><div class="highlight"><pre><span></span>- name: SSH server management
   hosts: ssh.server_hosts              ← SEE HERE
   tasks:
     - name: install SSH package
@@ -201,10 +201,10 @@ like so:</p>
 <p>There&#8217;s a bit of redundancy in this, but unfortunately Ansible playbooks
 hardcode the nodes to which a playbook applies.</p>
 <p>It&#8217;s now trivial to apply this playbook across your infrastructure:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ansible-playbook ssh.server.yml
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ansible-playbook ssh.server.yml
 </pre></div>
 </div>
-<p>My suggested way to use Ansible site-wide is then to create a <tt class="docutils literal"><span class="pre">site.yml</span></tt>
+<p>My suggested way to use Ansible site-wide is then to create a <code class="docutils literal"><span class="pre">site.yml</span></code>
 playbook that includes all the other playbooks (which shall hopefully be
 based on Ansible roles), and then to invoke Ansible like this:</p>
 <blockquote>
@@ -212,23 +212,23 @@ based on Ansible roles), and then to invoke Ansible like this:</p>
 </div></blockquote>
 <p>or, if you prefer only to reconfigure a subset of nodes, e.g. all
 webservers:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ansible-playbook site.yml --limit webserver
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ansible-playbook site.yml --limit webserver
 </pre></div>
 </div>
-<p>Again, if the singular word <tt class="docutils literal"><span class="pre">webserver</span></tt> puts you off, change the
+<p>Again, if the singular word <code class="docutils literal"><span class="pre">webserver</span></code> puts you off, change the
 convention as you wish.</p>
 <p>And if anyone comes up with a way to directly connect groups in the
 inventory with roles, thereby making it unnecessary to write playbook
 files (containing redundant information), please tell me!</p>
 </li>
-<li><p class="first">Parameters corresponding to a node become <tt class="docutils literal"><span class="pre">host_vars</span></tt> for that host.</p>
+<li><p class="first">Parameters corresponding to a node become <code class="docutils literal"><span class="pre">host_vars</span></code> for that host.</p>
 </li>
 </ul>
 </div>
 <div class="section" id="variable-interpolation">
 <h2>Variable interpolation<a class="headerlink" href="#variable-interpolation" title="Permalink to this headline">¶</a></h2>
 <p>Ansible allows you to include <a class="reference external" href="http://jinja.pocoo.org">Jinja2</a>-style variables in parameter values:</p>
-<div class="highlight-python"><div class="highlight"><pre>parameters:
+<div class="highlight-default"><div class="highlight"><pre><span></span>parameters:
   motd:
     greeting: Welcome to {{ ansible_fqdn }}!
     closing: This system is part of {{ realm }}
@@ -236,13 +236,13 @@ files (containing redundant information), please tell me!</p>
 </pre></div>
 </div>
 <p>However, in resolving this, Ansible casts everything to a string, so in this
-example, <tt class="docutils literal"><span class="pre">dict_reference</span></tt> would be the string-representation of the
-dictionary under the <tt class="docutils literal"><span class="pre">motd</span></tt> key <a class="footnote-reference" href="#string-casts" id="id1">[1]</a>. To get at facts (such as
-<tt class="docutils literal"><span class="pre">ansible_fqdn</span></tt>), you still have to use this approach, but for pure parameter
+example, <code class="docutils literal"><span class="pre">dict_reference</span></code> would be the string-representation of the
+dictionary under the <code class="docutils literal"><span class="pre">motd</span></code> key <a class="footnote-reference" href="#string-casts" id="id1">[1]</a>. To get at facts (such as
+<code class="docutils literal"><span class="pre">ansible_fqdn</span></code>), you still have to use this approach, but for pure parameter
 references, I strongly suggest to use <strong>reclass</strong> interpolation instead, as it
 supports deep references, does not clobber type information, and is more
 efficient anyway:</p>
-<div class="highlight-python"><div class="highlight"><pre>parameters:
+<div class="highlight-default"><div class="highlight"><pre><span></span>parameters:
   motd:
     greeting: Welcome to {{ ansible_fqdn }}!
     closing: This system is part of ${realm}
@@ -251,7 +251,7 @@ efficient anyway:</p>
 </div>
 <p>Now you just need to specify realm somewhere. The reference can reside in
 a parent class, while the variable is defined e.g. in the node definition.</p>
-<p>And as expected, <tt class="docutils literal"><span class="pre">dict_reference</span></tt> now points to a dictionary, not
+<p>And as expected, <code class="docutils literal"><span class="pre">dict_reference</span></code> now points to a dictionary, not
 a string-representation thereof.</p>
 <table class="docutils footnote" frame="void" id="string-casts" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -270,7 +270,7 @@ I dared to point out flaws. If you care, you may look at
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -288,24 +288,21 @@ I dared to point out flaws. If you care, you may look at
   <h4>Next topic</h4>
   <p class="topless"><a href="puppet.html"
                         title="next chapter">Using reclass with Puppet</a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -317,12 +314,12 @@ I dared to point out flaws. If you care, you may look at
         <li class="right" >
           <a href="salt.html" title="Using reclass with Salt"
              >previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, martin f. krafft.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

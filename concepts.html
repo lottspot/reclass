@@ -8,7 +8,7 @@
     
     <title>reclass concepts &mdash; reclass 1.4.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="reclass operations" href="operations.html" />
     <link rel="prev" title="Installation" href="install.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,14 +40,14 @@
         <li class="right" >
           <a href="install.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="reclass-concepts">
 <h1>reclass concepts<a class="headerlink" href="#reclass-concepts" title="Permalink to this headline">¶</a></h1>
@@ -110,19 +110,19 @@ webservers in Munich, which includes &#8220;this specific host&#8221;, for examp
 <p>Here&#8217;s a quick example, showing how parameters accumulate and can get
 replaced.</p>
 <blockquote>
-<div><p>All &#8220;unixnodes&#8221; (i.e. nodes who have the <tt class="docutils literal"><span class="pre">unixnode</span></tt> class in their
-ancestry) have <tt class="docutils literal"><span class="pre">/etc/motd</span></tt> centrally-managed (through the <tt class="docutils literal"><span class="pre">motd</span></tt>
+<div><p>All &#8220;unixnodes&#8221; (i.e. nodes who have the <code class="docutils literal"><span class="pre">unixnode</span></code> class in their
+ancestry) have <code class="docutils literal"><span class="pre">/etc/motd</span></code> centrally-managed (through the <code class="docutils literal"><span class="pre">motd</span></code>
 application), and the <cite>unixnode</cite> class definition provides a generic
 message-of-the-day to be put into this file.</p>
-<p>All descendants of the class <tt class="docutils literal"><span class="pre">debiannode</span></tt>, a descendant of <tt class="docutils literal"><span class="pre">unixnode</span></tt>,
+<p>All descendants of the class <code class="docutils literal"><span class="pre">debiannode</span></code>, a descendant of <code class="docutils literal"><span class="pre">unixnode</span></code>,
 should include the Debian codename in this message, so the
-message-of-the-day is overwritten in the <tt class="docutils literal"><span class="pre">debiannodes</span></tt> class.</p>
-<p>The node <tt class="docutils literal"><span class="pre">quantum.example.org</span></tt> (a <cite>debiannode</cite>) will have a scheduled
+message-of-the-day is overwritten in the <code class="docutils literal"><span class="pre">debiannodes</span></code> class.</p>
+<p>The node <code class="docutils literal"><span class="pre">quantum.example.org</span></code> (a <cite>debiannode</cite>) will have a scheduled
 downtime this weekend, so until Monday, an appropriate message-of-the-day is
 added to the node definition.</p>
-<p>When the <tt class="docutils literal"><span class="pre">motd</span></tt> application runs, it receives the appropriate
-message-of-the-day (from <tt class="docutils literal"><span class="pre">quantum.example.org</span></tt> when run on that node) and
-writes it into <tt class="docutils literal"><span class="pre">/etc/motd</span></tt>.</p>
+<p>When the <code class="docutils literal"><span class="pre">motd</span></code> application runs, it receives the appropriate
+message-of-the-day (from <code class="docutils literal"><span class="pre">quantum.example.org</span></code> when run on that node) and
+writes it into <code class="docutils literal"><span class="pre">/etc/motd</span></code>.</p>
 </div></blockquote>
 <p>At this point it should be noted that parameters whose values are lists or
 key-value pairs don&#8217;t get overwritten by children classes or node definitions,
@@ -133,53 +133,53 @@ walk through the class ancestry. It is possible for a node or child class to
 with <cite>~</cite>.</p>
 <p>Finally, <strong>reclass</strong> happily lets you use multiple inheritance, and ensures that
 the resolution of parameters is still well-defined. Here&#8217;s another example
-building upon the one about <tt class="docutils literal"><span class="pre">/etc/motd</span></tt> above:</p>
+building upon the one about <code class="docutils literal"><span class="pre">/etc/motd</span></code> above:</p>
 <blockquote>
-<div><p><tt class="docutils literal"><span class="pre">quantum.example.org</span></tt> (which is back up and therefore its node definition
+<div><p><code class="docutils literal"><span class="pre">quantum.example.org</span></code> (which is back up and therefore its node definition
 no longer contains a message-of-the-day) is at a site in Munich. Therefore,
-it is a child of the class <tt class="docutils literal"><span class="pre">hosted&#64;munich</span></tt>. This class is independent of
-the <tt class="docutils literal"><span class="pre">unixnode</span></tt> hierarchy, <tt class="docutils literal"><span class="pre">quantum.example.org</span></tt> derives from both.</p>
-<p>In this example infrastructure, <tt class="docutils literal"><span class="pre">hosted&#64;munich</span></tt> is more specific than
-<tt class="docutils literal"><span class="pre">debiannode</span></tt> because there are plenty of Debian nodes at other sites (and
-some non-Debian nodes in Munich). Therefore, <tt class="docutils literal"><span class="pre">quantum.example.org</span></tt> derives
-from <tt class="docutils literal"><span class="pre">hosted&#64;munich</span></tt> _after_ <tt class="docutils literal"><span class="pre">debiannodes</span></tt>.</p>
+it is a child of the class <code class="docutils literal"><span class="pre">hosted&#64;munich</span></code>. This class is independent of
+the <code class="docutils literal"><span class="pre">unixnode</span></code> hierarchy, <code class="docutils literal"><span class="pre">quantum.example.org</span></code> derives from both.</p>
+<p>In this example infrastructure, <code class="docutils literal"><span class="pre">hosted&#64;munich</span></code> is more specific than
+<code class="docutils literal"><span class="pre">debiannode</span></code> because there are plenty of Debian nodes at other sites (and
+some non-Debian nodes in Munich). Therefore, <code class="docutils literal"><span class="pre">quantum.example.org</span></code> derives
+from <code class="docutils literal"><span class="pre">hosted&#64;munich</span></code> _after_ <code class="docutils literal"><span class="pre">debiannodes</span></code>.</p>
 <p>When an electricity outage is expected over the weekend in Munich, the admin
-can change the message-of-the-day in the <tt class="docutils literal"><span class="pre">hosted&#64;munich</span></tt> class, and it
+can change the message-of-the-day in the <code class="docutils literal"><span class="pre">hosted&#64;munich</span></code> class, and it
 will apply to all hosts in Munich.</p>
-<p>However, not all hosts in Munich have <tt class="docutils literal"><span class="pre">/etc/motd</span></tt>, because some of them
-are of class <tt class="docutils literal"><span class="pre">windowsnode</span></tt>. Since the <tt class="docutils literal"><span class="pre">windowsnode</span></tt> ancestry does not
-specify the <tt class="docutils literal"><span class="pre">motd</span></tt> application, those hosts have access to the
+<p>However, not all hosts in Munich have <code class="docutils literal"><span class="pre">/etc/motd</span></code>, because some of them
+are of class <code class="docutils literal"><span class="pre">windowsnode</span></code>. Since the <code class="docutils literal"><span class="pre">windowsnode</span></code> ancestry does not
+specify the <code class="docutils literal"><span class="pre">motd</span></code> application, those hosts have access to the
 message-of-the-day in the node variables, but the message won&#8217;t get used…</p>
-<p>… unless, of course, <tt class="docutils literal"><span class="pre">windowsnode</span></tt> specified a Windows-specific
+<p>… unless, of course, <code class="docutils literal"><span class="pre">windowsnode</span></code> specified a Windows-specific
 application to bring such notices to the attention of the user.</p>
 </div></blockquote>
 <p>It&#8217;s also trivial to ensure a certain order of class evaluation. Here&#8217;s
 another example:</p>
 <blockquote>
-<div><p>The <tt class="docutils literal"><span class="pre">ssh.server</span></tt> class defines the <tt class="docutils literal"><span class="pre">permit_root_login</span></tt> parameter to <tt class="docutils literal"><span class="pre">no</span></tt>.</p>
-<p>The <tt class="docutils literal"><span class="pre">backuppc.client</span></tt> class defines the parameter to <tt class="docutils literal"><span class="pre">without-password</span></tt>,
+<div><p>The <code class="docutils literal"><span class="pre">ssh.server</span></code> class defines the <code class="docutils literal"><span class="pre">permit_root_login</span></code> parameter to <code class="docutils literal"><span class="pre">no</span></code>.</p>
+<p>The <code class="docutils literal"><span class="pre">backuppc.client</span></code> class defines the parameter to <code class="docutils literal"><span class="pre">without-password</span></code>,
 because the BackupPC server might need to log in to the host as root.</p>
 <p>Now, what happens if the admin accidentally provides the following two
 classes?</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">backuppc.client</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">ssh.server</span></tt></li>
+<li><code class="docutils literal"><span class="pre">backuppc.client</span></code></li>
+<li><code class="docutils literal"><span class="pre">ssh.server</span></code></li>
 </ul>
-<p>Theoretically, this would mean <tt class="docutils literal"><span class="pre">permit_root_login</span></tt> gets set to <tt class="docutils literal"><span class="pre">no</span></tt>.</p>
-<p>However, since all <tt class="docutils literal"><span class="pre">backuppc.client</span></tt> nodes need <tt class="docutils literal"><span class="pre">ssh.server</span></tt> (at least
-in most setups), the class <tt class="docutils literal"><span class="pre">backuppc.client</span></tt> itself derives from
-<tt class="docutils literal"><span class="pre">ssh.server</span></tt>, ensuring that it gets parsed before <tt class="docutils literal"><span class="pre">backuppc.client</span></tt>.</p>
-<p>When <strong>reclass</strong> returns to the node and encounters the <tt class="docutils literal"><span class="pre">ssh.server</span></tt> class
+<p>Theoretically, this would mean <code class="docutils literal"><span class="pre">permit_root_login</span></code> gets set to <code class="docutils literal"><span class="pre">no</span></code>.</p>
+<p>However, since all <code class="docutils literal"><span class="pre">backuppc.client</span></code> nodes need <code class="docutils literal"><span class="pre">ssh.server</span></code> (at least
+in most setups), the class <code class="docutils literal"><span class="pre">backuppc.client</span></code> itself derives from
+<code class="docutils literal"><span class="pre">ssh.server</span></code>, ensuring that it gets parsed before <code class="docutils literal"><span class="pre">backuppc.client</span></code>.</p>
+<p>When <strong>reclass</strong> returns to the node and encounters the <code class="docutils literal"><span class="pre">ssh.server</span></code> class
 defined there, it simply skips it, as it&#8217;s already been processed.</p>
 </div></blockquote>
-<p>Now read about <a class="reference internal" href="operations.html"><em>reclass operations</em></a>!</p>
+<p>Now read about <a class="reference internal" href="operations.html"><span class="doc">reclass operations</span></a>!</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="install.html"
@@ -187,24 +187,21 @@ defined there, it simply skips it, as it&#8217;s already been processed.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="operations.html"
                         title="next chapter">reclass operations</a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -216,12 +213,12 @@ defined there, it simply skips it, as it&#8217;s already been processed.</p>
         <li class="right" >
           <a href="install.html" title="Installation"
              >previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, martin f. krafft.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

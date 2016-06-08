@@ -8,7 +8,7 @@
     
     <title>reclass configuration file &mdash; reclass 1.4.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="Using reclass with Salt" href="salt.html" />
     <link rel="prev" title="reclass manpage" href="manpage.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,14 +40,14 @@
         <li class="right" >
           <a href="manpage.html" title="reclass manpage"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="reclass-configuration-file">
 <h1>reclass configuration file<a class="headerlink" href="#reclass-configuration-file" title="Permalink to this headline">¶</a></h1>
@@ -55,34 +55,34 @@
 a YAML-file and simply defines key-value pairs.</p>
 <p>The configuration file can be used to set defaults for all the options that
 are otherwise configurable via the command-line interface, so please use the
-<tt class="docutils literal"><span class="pre">--help</span></tt> output of <strong>reclass</strong> (or the <a class="reference internal" href="manpage.html"><em>manual page</em></a>) for
-reference. The command-line option <tt class="docutils literal"><span class="pre">--nodes-uri</span></tt> corresponds to the key
-<tt class="docutils literal"><span class="pre">nodes_uri</span></tt> in the configuration file. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre>storage_type: yaml_fs
-pretty_print: True
-output: json
-inventory_base_uri: /etc/reclass
-nodes_uri: ../nodes
+<code class="docutils literal"><span class="pre">--help</span></code> output of <strong>reclass</strong> (or the <a class="reference internal" href="manpage.html"><span class="doc">manual page</span></a>) for
+reference. The command-line option <code class="docutils literal"><span class="pre">--nodes-uri</span></code> corresponds to the key
+<code class="docutils literal"><span class="pre">nodes_uri</span></code> in the configuration file. For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">storage_type</span><span class="p">:</span> <span class="n">yaml_fs</span>
+<span class="n">pretty_print</span><span class="p">:</span> <span class="kc">True</span>
+<span class="n">output</span><span class="p">:</span> <span class="n">json</span>
+<span class="n">inventory_base_uri</span><span class="p">:</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">reclass</span>
+<span class="n">nodes_uri</span><span class="p">:</span> <span class="o">../</span><span class="n">nodes</span>
 </pre></div>
 </div>
 <p><strong>reclass</strong> first looks in the current directory for the file called
-<tt class="docutils literal"><span class="pre">reclass-config.yml</span></tt> (see <tt class="docutils literal"><span class="pre">reclass/defaults.py</span></tt>) and if no such file is
-found, it looks in <tt class="docutils literal"><span class="pre">$HOME</span></tt>, then in <tt class="docutils literal"><span class="pre">/etc/reclass</span></tt>, and then &#8220;next to&#8221; the
-<tt class="docutils literal"><span class="pre">reclass</span></tt> script itself, i.e. if the script is symlinked to
-<tt class="docutils literal"><span class="pre">/srv/provisioning/reclass</span></tt>, then the the script will try to access
-<tt class="docutils literal"><span class="pre">/srv/provisioning/reclass-config.yml</span></tt>.</p>
-<p>Note that <tt class="docutils literal"><span class="pre">yaml_fs</span></tt> is currently the only supported <tt class="docutils literal"><span class="pre">storage_type</span></tt>, and
+<code class="docutils literal"><span class="pre">reclass-config.yml</span></code> (see <code class="docutils literal"><span class="pre">reclass/defaults.py</span></code>) and if no such file is
+found, it looks in <code class="docutils literal"><span class="pre">$HOME</span></code>, then in <code class="docutils literal"><span class="pre">/etc/reclass</span></code>, and then &#8220;next to&#8221; the
+<code class="docutils literal"><span class="pre">reclass</span></code> script itself, i.e. if the script is symlinked to
+<code class="docutils literal"><span class="pre">/srv/provisioning/reclass</span></code>, then the the script will try to access
+<code class="docutils literal"><span class="pre">/srv/provisioning/reclass-config.yml</span></code>.</p>
+<p>Note that <code class="docutils literal"><span class="pre">yaml_fs</span></code> is currently the only supported <code class="docutils literal"><span class="pre">storage_type</span></code>, and
 it&#8217;s the default if you don&#8217;t set it.</p>
 <p>Adapters may implement their own lookup logic, of course, so make sure to read
-their documentation (for <a class="reference internal" href="salt.html"><em>Salt</em></a>, for <a class="reference internal" href="ansible.html"><em>Ansible</em></a>, and
-for <a class="reference internal" href="puppet.html"><em>Puppet</em></a>).</p>
+their documentation (for <a class="reference internal" href="salt.html"><span class="doc">Salt</span></a>, for <a class="reference internal" href="ansible.html"><span class="doc">Ansible</span></a>, and
+for <a class="reference internal" href="puppet.html"><span class="doc">Puppet</span></a>).</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="manpage.html"
@@ -90,24 +90,21 @@ for <a class="reference internal" href="puppet.html"><em>Puppet</em></a>).</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="salt.html"
                         title="next chapter">Using reclass with Salt</a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -119,12 +116,12 @@ for <a class="reference internal" href="puppet.html"><em>Puppet</em></a>).</p>
         <li class="right" >
           <a href="manpage.html" title="reclass manpage"
              >previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, martin f. krafft.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

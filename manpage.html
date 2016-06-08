@@ -8,7 +8,7 @@
     
     <title>reclass manpage &mdash; reclass 1.4.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="reclass configuration file" href="configfile.html" />
     <link rel="prev" title="External references" href="refs.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,14 +40,14 @@
         <li class="right" >
           <a href="refs.html" title="External references"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="reclass-manpage">
 <h1>reclass manpage<a class="headerlink" href="#reclass-manpage" title="Permalink to this headline">¶</a></h1>
@@ -67,8 +67,8 @@ a stand-alone tool for merging data sources recursively.</p>
 <p>The purpose of an ENC is to allow a system administrator to maintain an
 inventory of nodes to be managed, completely separately from the configuration
 of the automation tool. Usually, the external node classifier completely
-replaces the tool-specific inventory (such as <tt class="docutils literal"><span class="pre">site.pp</span></tt> for Puppet,
-<tt class="docutils literal"><span class="pre">ext_pillar</span></tt>/<tt class="docutils literal"><span class="pre">master_tops</span></tt> for Salt, or <tt class="docutils literal"><span class="pre">/etc/ansible/hosts</span></tt>).</p>
+replaces the tool-specific inventory (such as <code class="docutils literal"><span class="pre">site.pp</span></code> for Puppet,
+<code class="docutils literal"><span class="pre">ext_pillar</span></code>/<code class="docutils literal"><span class="pre">master_tops</span></code> for Salt, or <code class="docutils literal"><span class="pre">/etc/ansible/hosts</span></code>).</p>
 <p>With respect to the configuration management tool, the ENC then fulfills two
 jobs:</p>
 <ul class="simple">
@@ -90,7 +90,7 @@ manual page describes this interface.</p>
 </div>
 <div class="section" id="options">
 <h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
-<p>Please see the output of <tt class="docutils literal"><span class="pre">reclass</span> <span class="pre">--help</span></tt> for the default values of these
+<p>Please see the output of <code class="docutils literal"><span class="pre">reclass</span> <span class="pre">--help</span></code> for the default values of these
 options:</p>
 <div class="section" id="database-options">
 <h3>Database options<a class="headerlink" href="#database-options" title="Permalink to this headline">¶</a></h3>
@@ -169,8 +169,8 @@ options:</p>
 <h2>See also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
 <p>Please visit <a class="reference external" href="http://reclass.pantsfullofunix.net/">http://reclass.pantsfullofunix.net/</a> for more information about
 <strong>reclass</strong>.</p>
-<p>The documentation is also available from the <tt class="docutils literal"><span class="pre">./doc</span></tt> subtree in the source
-checkout, or from <tt class="docutils literal"><span class="pre">/usr/share/doc/reclass-doc</span></tt>.</p>
+<p>The documentation is also available from the <code class="docutils literal"><span class="pre">./doc</span></code> subtree in the source
+checkout, or from <code class="docutils literal"><span class="pre">/usr/share/doc/reclass-doc</span></code>.</p>
 </div>
 </div>
 
@@ -178,7 +178,7 @@ checkout, or from <tt class="docutils literal"><span class="pre">/usr/share/doc/
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -203,24 +203,21 @@ checkout, or from <tt class="docutils literal"><span class="pre">/usr/share/doc/
   <h4>Next topic</h4>
   <p class="topless"><a href="configfile.html"
                         title="next chapter">reclass configuration file</a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -232,12 +229,12 @@ checkout, or from <tt class="docutils literal"><span class="pre">/usr/share/doc/
         <li class="right" >
           <a href="refs.html" title="External references"
              >previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, martin f. krafft.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

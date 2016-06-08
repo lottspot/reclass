@@ -8,7 +8,7 @@
     
     <title>reclass to-do list &mdash; reclass 1.4.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="ChangeLog" href="changelog.html" />
     <link rel="prev" title="Hacking on reclass" href="hacking.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,14 +40,14 @@
         <li class="right" >
           <a href="hacking.html" title="Hacking on reclass"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="reclass-to-do-list">
 <h1>reclass to-do list<a class="headerlink" href="#reclass-to-do-list" title="Permalink to this headline">¶</a></h1>
@@ -71,8 +71,8 @@ above.</p>
 </div>
 <div class="section" id="configurable-file-extension">
 <h2>Configurable file extension<a class="headerlink" href="#configurable-file-extension" title="Permalink to this headline">¶</a></h2>
-<p>Right now, <tt class="docutils literal"><span class="pre">.yml</span></tt> is hard-coded. This could be exported to the
-configuration file, or even given as a list, so that <tt class="docutils literal"><span class="pre">.yml</span></tt> and <tt class="docutils literal"><span class="pre">.yaml</span></tt>
+<p>Right now, <code class="docutils literal"><span class="pre">.yml</span></code> is hard-coded. This could be exported to the
+configuration file, or even given as a list, so that <code class="docutils literal"><span class="pre">.yml</span></code> and <code class="docutils literal"><span class="pre">.yaml</span></code>
 can both be used.</p>
 <p>Actually, I don&#8217;t think this is such a good idea. If we create too many
 options right now, it&#8217;ll be harder to unify later. Please also see <a href="#id1"><span class="problematic" id="id2">`issue #17
@@ -88,7 +88,7 @@ help solve problems.</p>
 <h2>Data from CMS for interpolation<a class="headerlink" href="#data-from-cms-for-interpolation" title="Permalink to this headline">¶</a></h2>
 <p>Depending on the CMS in question, it would be nice if <strong>reclass</strong> had access to
 the host-specific data (facts, grains, etc.) and could use those in parameter
-interpolation. I can imagine this working for Salt, where the <tt class="docutils literal"><span class="pre">grains</span></tt>
+interpolation. I can imagine this working for Salt, where the <code class="docutils literal"><span class="pre">grains</span></code>
 dictionary (and results from previous external node classifiers) is made
 available to the external node classifiers, but I am not convinced this will
 be possible in Ansible and Puppet.</p>
@@ -104,29 +104,29 @@ pillar data).</p>
 <h2>Membership information<a class="headerlink" href="#membership-information" title="Permalink to this headline">¶</a></h2>
 <p>It would be nice if <strong>reclass</strong> could provide e.g. the Nagios master node with
 a list of clients that define it as their master. That would short-circuit
-Puppet&#8217;s <tt class="docutils literal"><span class="pre">storeconfigs</span></tt> and Salt&#8217;s <tt class="docutils literal"><span class="pre">mine</span></tt>.</p>
+Puppet&#8217;s <code class="docutils literal"><span class="pre">storeconfigs</span></code> and Salt&#8217;s <code class="docutils literal"><span class="pre">mine</span></code>.</p>
 <p>The way I envision this currently is to provide something I call &#8220;inventory
 queries&#8221;. For instance, the Nagios master node&#8217;s reclass data would contain
-the following (<tt class="docutils literal"><span class="pre">$[…]</span></tt> would denote interpolation to create a list, a bit
+the following (<code class="docutils literal"><span class="pre">$[…]</span></code> would denote interpolation to create a list, a bit
 like list comprehension):</p>
-<div class="highlight-python"><div class="highlight"><pre>parameters:
+<div class="highlight-default"><div class="highlight"><pre><span></span>parameters:
   nagios:
     hosts: $[nagios:master == SELF.nodename]
 </pre></div>
 </div>
 <p>This would cause <strong>reclass</strong> to iterate the inventory and generate a list of all
-the nodes that define a parameter <tt class="docutils literal"><span class="pre">nagios:master</span></tt> whose value equals to the
+the nodes that define a parameter <code class="docutils literal"><span class="pre">nagios:master</span></code> whose value equals to the
 name of the current node.</p>
 <p>This could be greatly simplified. For instance, we could simply limit
 comparisons against the name of the current node and just specify</p>
-<div class="highlight-python"><div class="highlight"><pre>$[nagios:master]
+<div class="highlight-default"><div class="highlight"><pre><span></span>$[nagios:master]
 </pre></div>
 </div>
 <p>which would be expanded to a list of node names whose pillar data includes
-<tt class="docutils literal"><span class="pre">${nagios:master}</span></tt> that matches the current node&#8217;s name.</p>
+<code class="docutils literal"><span class="pre">${nagios:master}</span></code> that matches the current node&#8217;s name.</p>
 <p>Or it could be made arbitrarily complex and flexible, e.g. any of the
 following:</p>
-<div class="highlight-python"><div class="highlight"><pre>$[nagios:master == SELF.nodename]                  # replace with nodename
+<div class="highlight-default"><div class="highlight"><pre><span></span>$[nagios:master == SELF.nodename]                  # replace with nodename
 $[nagios:master == SELF.nodename | nodename]       # name replacement value
 $[nagios:master == SELF.nodename | nagios:nodeid]  # replace with pillar data
 $[x:nagios:nodeid foreach x | x:nagios:master == SELF.nodename]
@@ -137,10 +137,10 @@ $[x:nagios:nodeid foreach x | x:nagios:master == SELF.nodename]
 </div>
 <div class="section" id="configuration-file-lookup-improvements">
 <h2>Configuration file lookup improvements<a class="headerlink" href="#configuration-file-lookup-improvements" title="Permalink to this headline">¶</a></h2>
-<p>Right now, the adapters and the CLI look for the <a class="reference internal" href="configfile.html"><em>configuration file</em></a> in a fixed set of locations. On of those derives from
-<tt class="docutils literal"><span class="pre">OPT_INVENTORY_BASE_URI</span></tt>, the default inventory base URI (<tt class="docutils literal"><span class="pre">/etc/reclass</span></tt>).
+<p>Right now, the adapters and the CLI look for the <a class="reference internal" href="configfile.html"><span class="doc">configuration file</span></a> in a fixed set of locations. On of those derives from
+<code class="docutils literal"><span class="pre">OPT_INVENTORY_BASE_URI</span></code>, the default inventory base URI (<code class="docutils literal"><span class="pre">/etc/reclass</span></code>).
 This should probably be updated in case the user changes the URI.</p>
-<p>Furthermore, <tt class="docutils literal"><span class="pre">$CWD</span></tt> and <tt class="docutils literal"><span class="pre">~</span></tt> might not make a lot of sense in all
+<p>Furthermore, <code class="docutils literal"><span class="pre">$CWD</span></code> and <code class="docutils literal"><span class="pre">~</span></code> might not make a lot of sense in all
 use-cases.</p>
 <p>However, this might be better addressed by the following point:</p>
 </div>
@@ -152,12 +152,12 @@ parsing.</p>
 <p>One nice way would be to generalise configuration file reading, integrate it
 with command-line parsing, and then allow the consumers (the adapters) to
 configure them, for instance, in the Salt adapter:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">config_proxy</span> <span class="o">=</span> <span class="n">ConfigProxy</span><span class="p">()</span>
-<span class="n">config_proxy</span><span class="o">.</span><span class="n">set_configfile_search_path</span><span class="p">([</span><span class="s">&#39;/etc/reclass&#39;</span><span class="p">,</span> <span class="s">&#39;/etc/salt&#39;</span><span class="p">])</span>
-<span class="n">config_proxy</span><span class="o">.</span><span class="n">lock_config_option</span><span class="p">(</span><span class="s">&#39;output&#39;</span><span class="p">,</span> <span class="s">&#39;yaml&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">config_proxy</span> <span class="o">=</span> <span class="n">ConfigProxy</span><span class="p">()</span>
+<span class="n">config_proxy</span><span class="o">.</span><span class="n">set_configfile_search_path</span><span class="p">([</span><span class="s1">&#39;/etc/reclass&#39;</span><span class="p">,</span> <span class="s1">&#39;/etc/salt&#39;</span><span class="p">])</span>
+<span class="n">config_proxy</span><span class="o">.</span><span class="n">lock_config_option</span><span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="s1">&#39;yaml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The last call would effectively remove the <tt class="docutils literal"><span class="pre">--output</span></tt> config option from the
+<p>The last call would effectively remove the <code class="docutils literal"><span class="pre">--output</span></code> config option from the
 CLI, and yield an error (or warning) if the option was encountered while
 parsing the configuration file.</p>
 <p>Furthermore, the class instances could become long-lived and keep a reference
@@ -167,7 +167,7 @@ to a storage proxy, e.g. to prevent having to reload storage on every request.</
 <h2>Node lists<a class="headerlink" href="#node-lists" title="Permalink to this headline">¶</a></h2>
 <p>Class mappings are still experimental, and one of the reasons I am not too
 happy with them right now is that one would still need to provide node files
-for all nodes for <tt class="docutils literal"><span class="pre">inventory</span></tt> invocations. This is because class mappings
+for all nodes for <code class="docutils literal"><span class="pre">inventory</span></code> invocations. This is because class mappings
 can assign classes based on patterns or regular expressions, but it is not
 possible to turn a pattern or regular expression into a list of valid nodes.</p>
 <p><a class="reference external" href="https://github.com/madduck/reclass/issues/9">Issue #9</a> contains a lengthy
@@ -185,7 +185,7 @@ name patterns, or using classes white-/blacklists.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -210,24 +210,21 @@ name patterns, or using classes white-/blacklists.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="changelog.html"
                         title="next chapter">ChangeLog</a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -239,12 +236,12 @@ name patterns, or using classes white-/blacklists.</p>
         <li class="right" >
           <a href="hacking.html" title="Hacking on reclass"
              >previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, martin f. krafft.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

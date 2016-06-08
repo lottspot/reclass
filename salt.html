@@ -8,7 +8,7 @@
     
     <title>Using reclass with Salt &mdash; reclass 1.4.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="Using reclass with Ansible" href="ansible.html" />
     <link rel="prev" title="reclass configuration file" href="configfile.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,82 +40,82 @@
         <li class="right" >
           <a href="configfile.html" title="reclass configuration file"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="using-reclass-with-salt">
 <h1>Using reclass with Salt<a class="headerlink" href="#using-reclass-with-salt" title="Permalink to this headline">¶</a></h1>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">You need Salt 0.17 to use <cite>reclass</cite>, as older versions do not include the
-<cite>reclass</cite> adapter. You could use the <tt class="docutils literal"><span class="pre">cmd_yaml</span></tt> adapters, but at least for
-<tt class="docutils literal"><span class="pre">ext_pillar</span></tt>, they are currently not useable, as they <a class="reference external" href="https://github.com/saltstack/salt/issues/2276">do not export the
+<cite>reclass</cite> adapter. You could use the <code class="docutils literal"><span class="pre">cmd_yaml</span></code> adapters, but at least for
+<code class="docutils literal"><span class="pre">ext_pillar</span></code>, they are currently not useable, as they <a class="reference external" href="https://github.com/saltstack/salt/issues/2276">do not export the
 minion ID to the command they run</a>.</p>
 </div>
 <div class="section" id="quick-start">
 <h2>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
 <p>The following steps should get you up and running quickly with <strong>reclass</strong> and
 <a class="reference external" href="http://saltstack.com/community">Salt</a>. You will need to decide for yourself where to put your <strong>reclass</strong>
-inventory. This can be your first <tt class="docutils literal"><span class="pre">base</span></tt> <tt class="docutils literal"><span class="pre">file_root</span></tt> (the default), or it
-could be <tt class="docutils literal"><span class="pre">/etc/reclass</span></tt>, or <tt class="docutils literal"><span class="pre">/srv/salt</span></tt>. The following shall assume the
+inventory. This can be your first <code class="docutils literal"><span class="pre">base</span></code> <code class="docutils literal"><span class="pre">file_root</span></code> (the default), or it
+could be <code class="docutils literal"><span class="pre">/etc/reclass</span></code>, or <code class="docutils literal"><span class="pre">/srv/salt</span></code>. The following shall assume the
 latter.</p>
-<p>Or you can also just look into <tt class="docutils literal"><span class="pre">./examples/salt</span></tt> of your <strong>reclass</strong>
-checkout (<tt class="docutils literal"><span class="pre">/usr/share/doc/examples/salt</span></tt> on Debian-systems), where the
+<p>Or you can also just look into <code class="docutils literal"><span class="pre">./examples/salt</span></code> of your <strong>reclass</strong>
+checkout (<code class="docutils literal"><span class="pre">/usr/share/doc/examples/salt</span></code> on Debian-systems), where the
 following steps have already been prepared.</p>
 <p>/…/reclass refers to the location of your <strong>reclass</strong> checkout.</p>
 <ol class="arabic">
-<li><p class="first">Complete the installation steps described in the <a class="reference internal" href="install.html"><em>installation section</em></a>.</p>
+<li><p class="first">Complete the installation steps described in the <a class="reference internal" href="install.html"><span class="doc">installation section</span></a>.</p>
 <p>Alternatively, you can also tell Salt via the master config file where to
 look for <strong>reclass</strong>, but then you won&#8217;t be able to interact with
 <strong>reclass</strong> through the command line.</p>
 </li>
-<li><p class="first">Copy the two directories <tt class="docutils literal"><span class="pre">nodes</span></tt> and <tt class="docutils literal"><span class="pre">classes</span></tt> from the example
-subdirectory in the <strong>reclass</strong> checkout to e.g. <tt class="docutils literal"><span class="pre">/srv/salt</span></tt>.</p>
+<li><p class="first">Copy the two directories <code class="docutils literal"><span class="pre">nodes</span></code> and <code class="docutils literal"><span class="pre">classes</span></code> from the example
+subdirectory in the <strong>reclass</strong> checkout to e.g. <code class="docutils literal"><span class="pre">/srv/salt</span></code>.</p>
 <p>It&#8217;s handy to symlink <strong>reclass</strong>&#8216; Salt adapter itself to that directory:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ln -s /usr/share/reclass/reclass-salt /srv/salt/states/reclass
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ln -s /usr/share/reclass/reclass-salt /srv/salt/states/reclass
 </pre></div>
 </div>
 <p>As you can now just inspect the data right there from the command line:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ./reclass --top
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ./reclass --top
 </pre></div>
 </div>
 <p>If you don&#8217;t want to do this, you can also let <strong>reclass</strong> know where to
 look for the inventory with the following contents in
-<tt class="docutils literal"><span class="pre">$HOME/reclass-config.yml</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre>storage_type: yaml_fs
-base_inventory_uri: /srv/reclass
+<code class="docutils literal"><span class="pre">$HOME/reclass-config.yml</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">storage_type</span><span class="p">:</span> <span class="n">yaml_fs</span>
+<span class="n">base_inventory_uri</span><span class="p">:</span> <span class="o">/</span><span class="n">srv</span><span class="o">/</span><span class="n">reclass</span>
 </pre></div>
 </div>
-<p>Or you can reuse the first entry of <tt class="docutils literal"><span class="pre">file_roots</span></tt> under <tt class="docutils literal"><span class="pre">base</span></tt> in the Salt
+<p>Or you can reuse the first entry of <code class="docutils literal"><span class="pre">file_roots</span></code> under <code class="docutils literal"><span class="pre">base</span></code> in the Salt
 master config.</p>
-<p>Note that <tt class="docutils literal"><span class="pre">yaml_fs</span></tt> is currently the only supported <tt class="docutils literal"><span class="pre">storage_type</span></tt>, and
+<p>Note that <code class="docutils literal"><span class="pre">yaml_fs</span></code> is currently the only supported <code class="docutils literal"><span class="pre">storage_type</span></code>, and
 it&#8217;s the default if you don&#8217;t set it.</p>
 </li>
 <li><p class="first">Check out your inventory by invoking</p>
-<div class="highlight-python"><div class="highlight"><pre>$ reclass-salt --top
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ reclass-salt --top
 </pre></div>
 </div>
 <p>which should return all the information about all defined nodes, which is
-only <tt class="docutils literal"><span class="pre">localhost</span></tt> in the example. This is essentially the same information
-that you would keep in your <tt class="docutils literal"><span class="pre">top.sls</span></tt> file.</p>
+only <code class="docutils literal"><span class="pre">localhost</span></code> in the example. This is essentially the same information
+that you would keep in your <code class="docutils literal"><span class="pre">top.sls</span></code> file.</p>
 <p>If you symlinked the script to your inventory base directory, use</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ./reclass --top
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ./reclass --top
 </pre></div>
 </div>
 </li>
-<li><p class="first">See the pillar information for <tt class="docutils literal"><span class="pre">localhost</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ reclass-salt --pillar localhost
+<li><p class="first">See the pillar information for <code class="docutils literal"><span class="pre">localhost</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ reclass-salt --pillar localhost
 </pre></div>
 </div>
 </li>
-<li><p class="first">Now add <strong>reclass</strong> to <tt class="docutils literal"><span class="pre">/etc/salt/master</span></tt>, like so:</p>
-<div class="highlight-python"><div class="highlight"><pre>reclass: &amp;reclass
+<li><p class="first">Now add <strong>reclass</strong> to <code class="docutils literal"><span class="pre">/etc/salt/master</span></code>, like so:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>reclass: &amp;reclass
     inventory_base_uri: /srv/salt
     reclass_source_path: ~/code/reclass
 
@@ -129,35 +129,35 @@ ext_pillar:
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">When using <tt class="docutils literal"><span class="pre">ext_pillar</span></tt> and/or <tt class="docutils literal"><span class="pre">master_tops</span></tt>, you should make sure
-that your <tt class="docutils literal"><span class="pre">file_roots</span></tt> paths do not contain a <tt class="docutils literal"><span class="pre">top.sls</span></tt> file. Even
+<p class="last">When using <code class="docutils literal"><span class="pre">ext_pillar</span></code> and/or <code class="docutils literal"><span class="pre">master_tops</span></code>, you should make sure
+that your <code class="docutils literal"><span class="pre">file_roots</span></code> paths do not contain a <code class="docutils literal"><span class="pre">top.sls</span></code> file. Even
 though they ought to be able to coexist, there are a few sharp edges
 around at the moment, so beware!</p>
 </div>
 <p>If you did not install <strong>reclass</strong> (but you are running it from source),
 you can either specify the source path like above, or you can add it to
-<tt class="docutils literal"><span class="pre">PYTHONPATH</span></tt> before invoking the Salt master, to ensure that Python can
+<code class="docutils literal"><span class="pre">PYTHONPATH</span></code> before invoking the Salt master, to ensure that Python can
 find it:</p>
-<div class="highlight-python"><div class="highlight"><pre>PYTHONPATH=/…/reclass /etc/init.d/salt-master restart
+<div class="highlight-default"><div class="highlight"><pre><span></span>PYTHONPATH=/…/reclass /etc/init.d/salt-master restart
 </pre></div>
 </div>
 </li>
-<li><p class="first">Provided that you have set up <tt class="docutils literal"><span class="pre">localhost</span></tt> as a Salt minion, the following
+<li><p class="first">Provided that you have set up <code class="docutils literal"><span class="pre">localhost</span></code> as a Salt minion, the following
 commands should now return the same data as above, but processed through
 salt:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ salt localhost pillar.items     # shows just the parameters
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ salt localhost pillar.items     # shows just the parameters
 $ salt localhost state.show_top   # shows only the states (applications)
 </pre></div>
 </div>
 <p>Alternatively, if you don&#8217;t have the Salt minion running yet:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ salt-call pillar.items     # shows just the parameters
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ salt-call pillar.items     # shows just the parameters
 $ salt-call state.show_top   # shows only the states (applications)
 </pre></div>
 </div>
 </li>
 <li><p class="first">You can also invoke <strong>reclass</strong> directly, which gives a slightly different
 view onto the same data, i.e. before it has been adapted for Salt:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ reclass --inventory
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ reclass --inventory
 $ reclass --nodeinfo localhost
 </pre></div>
 </div>
@@ -167,24 +167,24 @@ $ reclass --nodeinfo localhost
 <div class="section" id="configuration-file-and-master-configuration">
 <h2>Configuration file and master configuration<a class="headerlink" href="#configuration-file-and-master-configuration" title="Permalink to this headline">¶</a></h2>
 <p>Even though the Salt adapter of <strong>reclass</strong> looks for and reads the
-<a class="reference internal" href="configfile.html"><em>configuration file</em></a>, a better means to pass information to
+<a class="reference internal" href="configfile.html"><span class="doc">configuration file</span></a>, a better means to pass information to
 the adapter is via Salt&#8217;s master configuration file, as shown above. Not all
-configuration options can be passed this way (e.g. <tt class="docutils literal"><span class="pre">output</span></tt> is hardcoded to
-YAML, which Salt uses), but it <em>is</em> possible to specify <a class="reference internal" href="operations.html"><em>class mappings</em></a> next to all the storage-specific options.</p>
+configuration options can be passed this way (e.g. <code class="docutils literal"><span class="pre">output</span></code> is hardcoded to
+YAML, which Salt uses), but it <em>is</em> possible to specify <a class="reference internal" href="operations.html"><span class="doc">class mappings</span></a> next to all the storage-specific options.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">The Salt CLI adapter does <em>not</em> read Salt&#8217;s master configuration, so if you
-are calling <tt class="docutils literal"><span class="pre">reclass-salt</span></tt> from the command-line (the CLI exists for
+are calling <code class="docutils literal"><span class="pre">reclass-salt</span></code> from the command-line (the CLI exists for
 debugging purposes, mainly), be aware that it will be run in a different
 environment than when Salt queries reclass directly.</p>
 </div>
 </div>
 <div class="section" id="integration-with-salt">
 <h2>Integration with Salt<a class="headerlink" href="#integration-with-salt" title="Permalink to this headline">¶</a></h2>
-<p><strong>reclass</strong> hooks into Salt at two different points: <tt class="docutils literal"><span class="pre">master_tops</span></tt> and
-<tt class="docutils literal"><span class="pre">ext_pillar</span></tt>. For both, Salt provides plugins. These plugins need to know
+<p><strong>reclass</strong> hooks into Salt at two different points: <code class="docutils literal"><span class="pre">master_tops</span></code> and
+<code class="docutils literal"><span class="pre">ext_pillar</span></code>. For both, Salt provides plugins. These plugins need to know
 where to find <strong>reclass</strong>, so if <strong>reclass</strong> is not properly installed (but
-you are running it from source), make sure to export <tt class="docutils literal"><span class="pre">PYTHONPATH</span></tt>
+you are running it from source), make sure to export <code class="docutils literal"><span class="pre">PYTHONPATH</span></code>
 accordingly before you start your Salt master, or specify the path in the
 master configuration file, as show above.</p>
 <p>Salt has no concept of &#8220;nodes&#8221;, &#8220;applications&#8221;, &#8220;parameters&#8221;, and &#8220;classes&#8221;.
@@ -233,31 +233,31 @@ the pillar data of a specific node.</p>
 <p>The pillar data of a node include all the information about classes and
 applications, so you could theoretically use them to target your Salt calls at
 groups of nodes defined in the <strong>reclass</strong> inventory, e.g.</p>
-<div class="highlight-python"><div class="highlight"><pre>salt -I __reclass__:classes:salt_minion test.ping
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">salt</span> <span class="o">-</span><span class="n">I</span> <span class="n">__reclass__</span><span class="p">:</span><span class="n">classes</span><span class="p">:</span><span class="n">salt_minion</span> <span class="n">test</span><span class="o">.</span><span class="n">ping</span>
 </pre></div>
 </div>
 <p>Unfortunately, this does not work yet, please stay tuned, and let me know
 if you figure out a way. <a class="reference external" href="https://github.com/saltstack/salt/issues/5787">Salt issue #5787</a> is also of relevance.</p>
-<p>Optionally, data from pillars that run before the <strong>reclass</strong> <tt class="docutils literal"><span class="pre">ext_pillar</span></tt>
-(i.e. Salt&#8217;s builtin <tt class="docutils literal"><span class="pre">pillar_roots</span></tt>, as well as other <tt class="docutils literal"><span class="pre">ext_pillar</span></tt> modules
-listed before the <tt class="docutils literal"><span class="pre">reclass_adapter</span></tt>) can be made available to <strong>reclass</strong>.
+<p>Optionally, data from pillars that run before the <strong>reclass</strong> <code class="docutils literal"><span class="pre">ext_pillar</span></code>
+(i.e. Salt&#8217;s builtin <code class="docutils literal"><span class="pre">pillar_roots</span></code>, as well as other <code class="docutils literal"><span class="pre">ext_pillar</span></code> modules
+listed before the <code class="docutils literal"><span class="pre">reclass_adapter</span></code>) can be made available to <strong>reclass</strong>.
 Please use this with caution as referencing data from Salt in the inventory
 will make it harder or impossible to run <strong>reclass</strong> in other environments. This
 feature is therefore turned off by default and must be explicitly enabled in
 the Salt master configuration file, like this:</p>
-<div class="highlight-python"><div class="highlight"><pre>ext_pillar:
+<div class="highlight-default"><div class="highlight"><pre><span></span>ext_pillar:
   - reclass:
       […]
       propagate_pillar_data_to_reclass: True
 </pre></div>
 </div>
 <p>Unfortunately, to use this, currently you cannot use YAML references (i.e.
-<tt class="docutils literal"><span class="pre">*reclass</span></tt>) as shown above, as the <tt class="docutils literal"><span class="pre">master_tops</span></tt> subsystem does not accept
+<code class="docutils literal"><span class="pre">*reclass</span></code>) as shown above, as the <code class="docutils literal"><span class="pre">master_tops</span></code> subsystem does not accept
 this configuration parameter, and there seems to be no way to extend an alias.
 Specifically, the following is not possible — let me know if it is!:</p>
-<div class="highlight-python"><div class="highlight"><pre>ext_pillar:
-  - reclass: *reclass    # WARNING: this does not work!
-      propagate_pillar_data_to_reclass: True
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ext_pillar</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">reclass</span><span class="p">:</span> <span class="o">*</span><span class="n">reclass</span>    <span class="c1"># WARNING: this does not work!</span>
+      <span class="n">propagate_pillar_data_to_reclass</span><span class="p">:</span> <span class="kc">True</span>
 </pre></div>
 </div>
 </div>
@@ -267,7 +267,7 @@ Specifically, the following is not possible — let me know if it is!:</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -285,24 +285,21 @@ Specifically, the following is not possible — let me know if it is!:</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="ansible.html"
                         title="next chapter">Using reclass with Ansible</a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -314,12 +311,12 @@ Specifically, the following is not possible — let me know if it is!:</p>
         <li class="right" >
           <a href="configfile.html" title="reclass configuration file"
              >previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, martin f. krafft.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

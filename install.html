@@ -8,7 +8,7 @@
     
     <title>Installation &mdash; reclass 1.4.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="reclass concepts" href="concepts.html" />
     <link rel="prev" title="reclass — Recursive external node classification" href="index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,14 +40,14 @@
         <li class="right" >
           <a href="index.html" title="reclass — Recursive external node classification"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
@@ -55,19 +55,19 @@
 <h2>For Debian users (including Ubuntu)<a class="headerlink" href="#for-debian-users-including-ubuntu" title="Permalink to this headline">¶</a></h2>
 <p><strong>reclass</strong> has been <a class="reference external" href="http://packages.debian.org/search?keywords=reclass">packaged for Debian</a>. To use it, just install it with
 APT:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ apt-get install reclass [reclass-doc]
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ apt-get install reclass [reclass-doc]
 </pre></div>
 </div>
 </div>
 <div class="section" id="for-archlinux-users">
 <h2>For ArchLinux users<a class="headerlink" href="#for-archlinux-users" title="Permalink to this headline">¶</a></h2>
 <p><strong>reclass</strong> is <a class="reference external" href="https://aur.archlinux.org/packages/reclass-git/">available for ArchLinux</a>, thanks to Niels Abspoel.
-Dowload the <a class="reference external" href="https://aur.archlinux.org/packages/re/reclass-git/reclass-git.tar.gz">tarball</a> from <tt class="docutils literal"><span class="pre">aur</span></tt> or <tt class="docutils literal"><span class="pre">yaourt</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ yaourt -S reclass
+Dowload the <a class="reference external" href="https://aur.archlinux.org/packages/re/reclass-git/reclass-git.tar.gz">tarball</a> from <code class="docutils literal"><span class="pre">aur</span></code> or <code class="docutils literal"><span class="pre">yaourt</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ yaourt -S reclass
 </pre></div>
 </div>
 <p>or:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ tar xvzf reclass-git.tar.gz
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ tar xvzf reclass-git.tar.gz
 $ cd reclass-git; makepkg
 $ sudo pacman -U reclass-git-&lt;git-commit-hash&gt;.tar.gz
 </pre></div>
@@ -82,30 +82,30 @@ a patch!</p>
 <div class="section" id="from-source">
 <h2>From source<a class="headerlink" href="#from-source" title="Permalink to this headline">¶</a></h2>
 <p><strong>reclass</strong> is currently maintained <a class="reference external" href="http://github.com/madduck/reclass">on Github</a>, so to obtain the source, run:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ git clone https://github.com/madduck/reclass.git
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone https://github.com/madduck/reclass.git
 </pre></div>
 </div>
 <p>or:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ git clone ssh://git@github.com:madduck/reclass.git
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone ssh://git@github.com:madduck/reclass.git
 </pre></div>
 </div>
 <p>If you want a tarball, please <a class="reference external" href="http://http.debian.net/debian/pool/main/r/reclass/">obtain it from the Debian archive</a>.</p>
 <p>Before you can use <strong>reclass</strong>, you need to install it into a place where Python
-can find it. The following step should install the package to <tt class="docutils literal"><span class="pre">/usr/local</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python setup.py install
+can find it. The following step should install the package to <code class="docutils literal"><span class="pre">/usr/local</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py install
 </pre></div>
 </div>
 <p>If you want to install to a different location, use &#8211;prefix like so:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python setup.py install --prefix=/opt/local
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py install --prefix=/opt/local
 </pre></div>
 </div>
 <p>Just make sure that the destination is in the Python module search path, which
 you can check like this:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python -c &#39;import sys; print sys.path&#39;
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python -c &#39;import sys; print sys.path&#39;
 </pre></div>
 </div>
 <p>More options can be found in the output of</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python setup.py install --help
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py install --help
 $ python setup.py --help
 $ python setup.py --help-commands
 $ python setup.py --help [cmd]
@@ -113,17 +113,17 @@ $ python setup.py --help [cmd]
 </div>
 <p>If you just want to run <strong>reclass</strong> from source, e.g. because you are going to be
 making and testing changes, install it in &#8220;development mode&#8221;:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python setup.py develop
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py develop
 </pre></div>
 </div>
 <p>To uninstall (the rm call is necessary due to <a class="reference external" href="http://bugs.debian.org/714960">a bug in setuptools</a>):</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python setup.py develop --uninstall
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py develop --uninstall
 $ rm /usr/local/bin/reclass*
 </pre></div>
 </div>
 <p><a class="reference external" href="http://bugs.python.org/issue4673">Uninstallation currently isn&#8217;t possible</a> for packages installed to
 /usr/local as per the above method, unfortunately. The following should do:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ rm -r /usr/local/lib/python*/dist-packages/reclass* /usr/local/bin/reclass*
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ rm -r /usr/local/lib/python*/dist-packages/reclass* /usr/local/bin/reclass*
 </pre></div>
 </div>
 </div>
@@ -133,7 +133,7 @@ $ rm /usr/local/bin/reclass*
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -152,24 +152,21 @@ $ rm /usr/local/bin/reclass*
   <h4>Next topic</h4>
   <p class="topless"><a href="concepts.html"
                         title="next chapter">reclass concepts</a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -181,12 +178,12 @@ $ rm /usr/local/bin/reclass*
         <li class="right" >
           <a href="index.html" title="reclass — Recursive external node classification"
              >previous</a> |</li>
-        <li><a href="index.html">reclass</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">reclass</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, martin f. krafft.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>
