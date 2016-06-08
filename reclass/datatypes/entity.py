@@ -53,6 +53,9 @@ class Entity(object):
                             'instance of type %s' % type(parameters))
         self._parameters = parameters
 
+    def expand_functions(self, inventory):
+        self.parameters.interpolate_functions(inventory)
+
     def merge(self, other):
         self._classes.merge_unique(other._classes)
         self._applications.merge_unique(other._applications)

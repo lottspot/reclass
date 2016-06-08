@@ -133,12 +133,21 @@ class Core(object):
         return ret
 
     def nodeinfo(self, nodename):
-        return self._nodeinfo_as_dict(nodename, self._nodeinfo(nodename))
+        return self.inventory()['nodes'][nodename]
 
     def inventory(self):
         entities = {}
+
+        # first run, reference parameters are expanded
         for n in self._storage.enumerate_nodes():
             entities[n] = self._nodeinfo(n)
+
+        # second run, function are executed
+        #all_parameters = {}
+        #for nodename, info in entities.items():
+        #    all_parameters.update({nodename: info.parameters})
+        for nodename, node in entities.items():
+            node.expand_functions(inventory=entities)
 
         nodes = {}
         applications = {}
