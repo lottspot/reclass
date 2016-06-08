@@ -20,6 +20,16 @@ from reclass.config import find_and_read_configfile, get_options
 from reclass.version import *
 from reclass.constants import MODE_NODEINFO
 
+def node_to_node(nodeinfo):
+    """
+    convert reclass node to Ansible host_vars
+    """
+    # Massage and shift the data like Ansible wants it
+    nodeinfo['parameters']['__reclass__'] = nodeinfo['__reclass__']
+    for i in ('classes', 'applications'):
+        nodeinfo['parameters']['__reclass__'][i] = nodeinfo[i]
+    return nodeinfo['parameters']
+
 def cli():
     try:
         # this adapter has to be symlinked to ansible_dir, so we can use this
@@ -29,7 +39,8 @@ def cli():
         defaults = {'inventory_base_uri': ansible_dir,
                     'pretty_print' : True,
                     'output' : 'json',
-                    'applications_postfix': '_hosts'
+                    'applications_postfix': '_hosts',
+                    'no_meta': True
                    }
         defaults.update(find_and_read_configfile())
 
@@ -57,16 +68,11 @@ def cli():
         storage = get_storage(options.storage_type, options.nodes_uri,
                               options.classes_uri)
         class_mappings = defaults.get('class_mappings')
+        no_meta = defaults.get('no_meta')
         reclass = Core(storage, class_mappings)
 
         if options.mode == MODE_NODEINFO:
-            data = reclass.nodeinfo(options.hostname)
-            # Massage and shift the data like Ansible wants it
-            data['parameters']['__reclass__'] = data['__reclass__']
-            for i in ('classes', 'applications'):
-                data['parameters']['__reclass__'][i] = data[i]
-            data = data['parameters']
-
+            data = node_to_node(reclass.nodeinfo(options.hostname))
         else:
             data = reclass.inventory()
             # Ansible inventory is only the list of groups. Groups are the set
@@ -75,11 +81,18 @@ def cli():
             apps = data['applications']
             if options.applications_postfix:
                 postfix = options.applications_postfix
-                groups.update([(k + postfix, v) for k,v in apps.iteritems()])
+                groups.update([(k + postfix, v) for k, v in apps.iteritems()])
             else:
                 groups.update(apps)
 
-            data = groups
+            if no_meta:
+                data = groups
+            else:
+                hostvars = dict()
+                for node, nodeinfo in data['nodes'].items():
+                    hostvars[node] = node_to_node(nodeinfo)
+                data = groups
+                data['_meta'] = {'hostvars': hostvars}
 
         print output(data, options.output, options.pretty_print)
 
